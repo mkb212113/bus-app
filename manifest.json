@@ -1,0 +1,9 @@
+{
+  "name": "部署アプリ",
+  "short_name": "部署",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#f7f2e8",
+  "icons": []
+}
