@@ -2,126 +2,132 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>勤務確認</title>
-  <style>
-    body {
-      margin: 0;
-      background: #fdf7e9;
-      font-family: "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
-      text-align: center;
-    }
 
-    .screen {
-      display: none;
-      min-height: 100vh;
-      padding: 30px 20px;
-      box-sizing: border-box;
-    }
-
-    .active {
-      display: block;
-    }
-
-    h1 {
-      font-size: 32px;
-      color: #1e4fa1;
-      margin-bottom: 40px;
-    }
-
-    .logo {
-      font-size: 20px;
-      color: #1e4fa1;
-      margin-top: 40px;
-    }
-
-    .go-btn {
-      width: 160px;
-      height: 160px;
-      border-radius: 50%;
-      background: linear-gradient(#6fb6ff, #2f78d6);
-      color: white;
-      font-size: 36px;
-      font-weight: bold;
-      border: none;
-      box-shadow: 0 6px 0 #1e4fa1;
-    }
-
-    input {
-      font-size: 18px;
-      padding: 10px;
-      width: 80%;
-      max-width: 300px;
-    }
-
-    .btn {
-      margin-top: 20px;
-      font-size: 18px;
-      padding: 10px 20px;
-    }
-
-    iframe {
-      width: 100%;
-      height: 70vh;
-      border: none;
-      margin-top: 20px;
-    }
-  </style>
+  <!-- ★キャッシュ対策：?v=3 を付ける -->
+  <link rel="stylesheet" href="style.css?v=3" />
 </head>
-
 <body>
 
-<!-- 初期画面 -->
-<div id="top" class="screen active">
-  <h1>勤務確認</h1>
-  <button class="go-btn" onclick="goNext()">GO!</button>
-  <div class="logo">MKB 春日井</div>
-</div>
+  <!-- ① 初期画面 -->
+  <section id="screen-home" class="screen active">
+    <h1 class="title">勤務確認</h1>
 
-<!-- 名前入力画面 -->
-<div id="name" class="screen">
-  <h1>名前を入力してください</h1>
-  <input id="username" placeholder="例：山田 太郎" />
-  <br />
-  <button class="btn" onclick="saveName()">決定</button>
-</div>
+    <button id="goBtn" class="go-btn" type="button">GO!</button>
 
-<!-- 点呼簿画面 -->
-<div id="pdf" class="screen">
-  <h1>点呼簿確認</h1>
+    <div id="userName" class="user-name">（未登録）</div>
+  </section>
 
-  <!-- ★ここがPDF表示部分 -->
-  <iframe src="スキャン_20251104-1111.pdf"></iframe>
+  <!-- ② 点呼簿（PDF）画面 -->
+  <section id="screen-pdf" class="screen">
+    <div class="topbar">
+      <button id="backBtn" class="back-btn" type="button">← 戻る</button>
+      <div class="top-title">点呼簿確認</div>
+      <div style="width:44px;"></div>
+    </div>
 
-  <p>
-    <input type="checkbox" /> 確認しました
-  </p>
-</div>
+    <div class="pdf-wrap">
+      <!-- ★ここを自分のPDFファイル名に合わせてください -->
+      <a class="pdf-link" href="スキャン_20251104-1111.pdf" target="_blank" rel="noopener">
+        <div class="pdf-card">
+          <div class="pdf-icon">PDF</div>
+          <div class="pdf-name">スキャン_20251104-1111.pdf</div>
+          <div class="pdf-open">開く</div>
+        </div>
+      </a>
+    </div>
+
+    <!-- 画面下の「確認しました」エリア -->
+    <div class="confirm-bar">
+      <label class="confirm-left">
+        <input id="confirmCheck" type="checkbox" />
+        <span>確認しました</span>
+      </label>
+
+      <div class="confirm-right">
+        <span class="confirmed-title">確認者：</span>
+        <span id="confirmedList" class="confirmed-list">まだいません</span>
+      </div>
+    </div>
+  </section>
 
 <script>
-  function show(id) {
-    document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
-    document.getElementById(id).classList.add("active");
-  }
+  // ===== 画面切り替え =====
+  const home = document.getElementById("screen-home");
+  const pdf  = document.getElementById("screen-pdf");
+  const goBtn = document.getElementById("goBtn");
+  const backBtn = document.getElementById("backBtn");
 
-  function goNext() {
-    const name = localStorage.getItem("name");
-    if (name) {
-      show("pdf");
-    } else {
-      show("name");
+  function showHome(){ home.classList.add("active"); pdf.classList.remove("active"); window.scrollTo(0,0); }
+  function showPdf(){ pdf.classList.add("active"); home.classList.remove("active"); window.scrollTo(0,0); }
+
+  // ===== 名前保存（スマホに保存）=====
+  const userNameEl = document.getElementById("userName");
+
+  function getName(){ return localStorage.getItem("bus_name") || ""; }
+  function setName(name){ localStorage.setItem("bus_name", name); }
+
+  function ensureName(){
+    let name = getName();
+    if(!name){
+      name = prompt("お名前を入力してください（例：青山）") || "";
+      name = name.trim();
+      if(!name){
+        alert("名前が未入力です。もう一度GOを押してください。");
+        return false;
+      }
+      setName(name);
     }
+    userNameEl.textContent = name ? ("MKB " + name) : "（未登録）";
+    return true;
   }
 
-  function saveName() {
-    const name = document.getElementById("username").value;
-    if (!name) {
-      alert("名前を入力してください");
+  // 初回表示
+  (function init(){
+    const n = getName();
+    userNameEl.textContent = n ? ("MKB " + n) : "（未登録）";
+  })();
+
+  goBtn.addEventListener("click", () => {
+    if(!ensureName()) return;
+    showPdf();
+  });
+
+  backBtn.addEventListener("click", showHome);
+
+  // ===== 「確認しました」チェック（今回は端末内だけで動く簡易版）=====
+  // ※あとで「全員で共有（誰が押したか）」に拡張できます
+  const confirmCheck = document.getElementById("confirmCheck");
+  const confirmedList = document.getElementById("confirmedList");
+
+  function loadConfirmed(){
+    const arr = JSON.parse(localStorage.getItem("bus_confirmed") || "[]");
+    if(arr.length === 0) confirmedList.textContent = "まだいません";
+    else confirmedList.textContent = arr.join("、");
+  }
+
+  function addConfirmed(name){
+    const arr = JSON.parse(localStorage.getItem("bus_confirmed") || "[]");
+    if(!arr.includes(name)) arr.push(name);
+    localStorage.setItem("bus_confirmed", JSON.stringify(arr));
+  }
+
+  loadConfirmed();
+
+  confirmCheck.addEventListener("change", () => {
+    const name = getName();
+    if(!name){
+      alert("先にGOで名前登録してください");
+      confirmCheck.checked = false;
       return;
     }
-    localStorage.setItem("name", name);
-    show("pdf");
-  }
+    if(confirmCheck.checked){
+      addConfirmed(name);
+      loadConfirmed();
+      alert("確認しました を登録しました");
+    }
+  });
 </script>
 
 </body>
