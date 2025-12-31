@@ -1,26 +1,186 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>勤務確認</title>
   <link rel="stylesheet" href="style.css" />
-  <link rel="manifest" href="manifest.json" />
 </head>
 <body>
-  <div class="screen">
-    <div class="title">勤務確認</div>
 
-    <button class="go-btn" id="goBtn">GO!</button>
+  <!-- ① 初期画面 -->
+  <main id="home" class="screen active">
+    <h1 class="title">勤務確認</h1>
 
-    <div class="footer">MKB 春日井</div>
-  </div>
+    <button id="goBtn" class="go-btn" type="button">GO!</button>
 
-  <script>
-    // いまは動作確認用：押したらメッセージを出すだけ
-    document.getElementById("goBtn").addEventListener("click", () => {
-      alert("勤務確認をしてください。");
+    <div class="footer-name" id="footerName">MKB 春日井</div>
+  </main>
+
+  <!-- ② 勤務確認画面 -->
+  <main id="duty" class="screen">
+    <header class="topbar">
+      <button id="backBtn" class="back-btn" type="button">← 戻る</button>
+      <div class="whoami">
+        あなた：<span id="myNameLabel">未設定</span>
+      </div>
+    </header>
+
+    <section class="panel">
+      <h2 class="section-title">点呼簿PDF</h2>
+
+      <!-- ★ステップ1：まずは固定PDFを表示（sample.pdf） -->
+      <p class="note">
+        まずは固定のPDFを表示します。あとで「日付ごと」「アップロード」などを追加します。
+      </p>
+
+      <div class="pdf-box">
+        <!-- sample.pdf をリポジトリに置くとここに表示されます -->
+        <iframe id="pdfFrame" class="pdf-frame" src="sample.pdf"></iframe>
+      </div>
+
+      <p class="note small">
+        ※ PDFが表示されない場合：まだ sample.pdf がリポジトリに無い / ファイル名が違う可能性があります。
+      </p>
+    </section>
+
+    <section class="panel">
+      <h2 class="section-title">確認</h2>
+
+      <p class="note">
+        下のボタンを押すと「確認しました」が記録されます（※今はこのスマホ内だけの記録です）。
+      </p>
+
+      <button id="confirmBtn" class="confirm-btn" type="button">確認しました</button>
+
+      <div class="confirm-list">
+        <div class="confirm-list-title">確認した履歴（この端末）</div>
+        <ul id="confirmList"></ul>
+      </div>
+
+      <button id="resetBtn" class="danger-btn" type="button">この端末の履歴を消す</button>
+    </section>
+  </main>
+
+<script>
+  // ---- 保存キー ----
+  const KEY_NAME = "busapp_name";
+  const KEY_CONFIRMS = "busapp_confirms_v1";
+
+  const home = document.getElementById("home");
+  const duty = document.getElementById("duty");
+
+  const goBtn = document.getElementById("goBtn");
+  const backBtn = document.getElementById("backBtn");
+  const confirmBtn = document.getElementById("confirmBtn");
+  const resetBtn = document.getElementById("resetBtn");
+
+  const myNameLabel = document.getElementById("myNameLabel");
+  const confirmList = document.getElementById("confirmList");
+
+  function showScreen(screen) {
+    home.classList.remove("active");
+    duty.classList.remove("active");
+    screen.classList.add("active");
+    window.scrollTo(0, 0);
+  }
+
+  function getName() {
+    return localStorage.getItem(KEY_NAME) || "";
+  }
+
+  function setName(name) {
+    localStorage.setItem(KEY_NAME, name);
+  }
+
+  function loadConfirms() {
+    try {
+      return JSON.parse(localStorage.getItem(KEY_CONFIRMS) || "[]");
+    } catch {
+      return [];
+    }
+  }
+
+  function saveConfirms(list) {
+    localStorage.setItem(KEY_CONFIRMS, JSON.stringify(list));
+  }
+
+  function renderConfirms() {
+    const list = loadConfirms();
+    confirmList.innerHTML = "";
+    if (list.length === 0) {
+      const li = document.createElement("li");
+      li.className = "empty";
+      li.textContent = "まだ確認履歴はありません。";
+      confirmList.appendChild(li);
+      return;
+    }
+    list.slice().reverse().forEach(item => {
+      const li = document.createElement("li");
+      li.innerHTML = `<span class="c-name">${item.name}</span>
+                      <span class="c-time">${item.time}</span>`;
+      confirmList.appendChild(li);
     });
-  </script>
+  }
+
+  function ensureName() {
+    let name = getName();
+    if (!name) {
+      name = prompt("あなたの名前を入力してください（例：青山）");
+      if (!name) return "";
+      name = name.trim();
+      if (!name) return "";
+      setName(name);
+    }
+    return name;
+  }
+
+  function updateNameLabel() {
+    const name = getName();
+    myNameLabel.textContent = name ? name : "未設定";
+  }
+
+  // 初期表示
+  updateNameLabel();
+  renderConfirms();
+
+  // GOボタン
+  goBtn.addEventListener("click", () => {
+    const name = ensureName();
+    if (!name) return;
+    updateNameLabel();
+    showScreen(duty);
+  });
+
+  // 戻る
+  backBtn.addEventListener("click", () => {
+    showScreen(home);
+  });
+
+  // 確認しました
+  confirmBtn.addEventListener("click", () => {
+    const name = ensureName();
+    if (!name) return;
+
+    const now = new Date();
+    const time = `${now.getFullYear()}/${String(now.getMonth()+1).padStart(2,"0")}/${String(now.getDate()).padStart(2,"0")} ` +
+                 `${String(now.getHours()).padStart(2,"0")}:${String(now.getMinutes()).padStart(2,"0")}`;
+
+    const list = loadConfirms();
+    list.push({ name, time });
+    saveConfirms(list);
+    updateNameLabel();
+    renderConfirms();
+    alert("記録しました（この端末内）");
+  });
+
+  // 履歴リセット
+  resetBtn.addEventListener("click", () => {
+    if (!confirm("この端末の確認履歴を消します。よろしいですか？")) return;
+    saveConfirms([]);
+    renderConfirms();
+  });
+</script>
+
 </body>
 </html>
