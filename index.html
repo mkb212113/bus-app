@@ -1,73 +1,51 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>バスアプリ</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>部署アプリ</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-<!-- ホーム -->
-<div id="home">
-  <div class="container">
-    <div class="box" onclick="showPage('duty')">
-      <div class="icon">🕒</div>
-      <div class="label">勤務確認</div>
-    </div>
-
-    <div class="box" onclick="showPage('notice')">
-      <div class="icon">📣</div>
-      <div class="label">連絡事項</div>
-    </div>
-
-    <div class="box" onclick="showPage('share')">
-      <div class="icon">📁</div>
-      <div class="label">情報共有</div>
-    </div>
-
-    <div class="box bus">
-      <div class="bus-area">🚌</div>
+  <!-- メニュー画面 -->
+  <div id="menu" class="screen">
+    <div class="menu-item" onclick="showScreen('duty')">🕒 勤務確認</div>
+    <div class="menu-item admin-only" onclick="showScreen('notice')">📢 連絡事項</div>
+    <div class="menu-item" onclick="showScreen('share')">📁 情報共有</div>
+    <div class="bus-area">
+      <div class="bus">🚌</div>
+      <div class="bus-text">安全運行</div>
     </div>
   </div>
-</div>
 
-<!-- 勤務確認 -->
-<div id="duty" class="page">
-  <button class="back-btn" onclick="goHome()">← 戻る</button>
-  <h1>勤務確認</h1>
-  <p class="message">勤務確認をしてください。</p>
-  <p>ここに点呼簿写真アップロード機能を追加していきます。</p>
-</div>
+  <!-- 勤務確認画面 -->
+  <div id="duty" class="screen hidden">
+    <div class="page-title">勤務確認</div>
+    <div class="page-box">勤務確認をしてください。</div>
+    <button class="back-btn" onclick="showScreen('menu')">← 戻る</button>
+  </div>
 
-<!-- 連絡事項 -->
-<div id="notice" class="page">
-  <button class="back-btn" onclick="goHome()">← 戻る</button>
-  <h1>連絡事項</h1>
-  <p>ここに管理者投稿・新着表示を追加していきます。</p>
-</div>
+  <!-- 連絡事項画面（仮） -->
+  <div id="notice" class="screen hidden">
+    <div class="page-title">連絡事項</div>
+    <div class="page-box">（ここに連絡事項を表示します）</div>
+    <button class="back-btn" onclick="showScreen('menu')">← 戻る</button>
+  </div>
 
-<!-- 情報共有 -->
-<div id="share" class="page">
-  <button class="back-btn" onclick="goHome()">← 戻る</button>
-  <h1>情報共有</h1>
-  <p>ここに写真・コメント投稿機能を追加していきます。</p>
-</div>
+  <!-- 情報共有画面（仮） -->
+  <div id="share" class="screen hidden">
+    <div class="page-title">情報共有</div>
+    <div class="page-box">（ここに情報共有を表示します）</div>
+    <button class="back-btn" onclick="showScreen('menu')">← 戻る</button>
+  </div>
 
-<script>
-  function showPage(id) {
-    document.getElementById('home').style.display = 'none';
-    document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
-    document.getElementById(id).style.display = 'block';
-    window.scrollTo(0, 0);
-  }
-  function goHome() {
-    document.getElementById('home').style.display = 'block';
-    document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
-    window.scrollTo(0, 0);
-  }
-</script>
+  <script>
+    function showScreen(id) {
+      document.querySelectorAll('.screen').forEach(el => el.classList.add('hidden'));
+      document.getElementById(id).classList.remove('hidden');
+    }
+  </script>
 
 </body>
 </html>
-
