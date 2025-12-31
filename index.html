@@ -1,126 +1,236 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>勤務確認</title>
-
-<style>
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
-  background: #f7f3e8; /* クリーム色 */
-  text-align: center;
-}
-
-/* ===== ヘッダー ===== */
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 16px;
-  color: #0b3c8a;
-  font-weight: bold;
-}
-
-.admin-btn {
-  font-size: 14px;
-  padding: 6px 10px;
-  border: 1px solid #0b3c8a;
-  border-radius: 6px;
-  background: #fff;
-}
-
-/* ===== 初期画面 ===== */
-#home {
-  margin-top: 40px;
-}
-
-#title {
-  font-size: 34px; /* 勤務確認を大きく */
-  font-weight: bold;
-  color: #0b3c8a;
-  margin-bottom: 40px;
-}
-
-/* ===== GOボタン（直径約4cm相当） ===== */
-#goBtn {
-  width: 160px;
-  height: 160px;
-  border-radius: 50%;
-  background: linear-gradient(#1f6fd8, #0b3c8a);
-  color: #fff;
-  font-size: 42px;
-  font-weight: bold;
-  border: none;
-  box-shadow: 0 8px 12px rgba(0,0,0,0.25);
-}
-
-#goBtn:active {
-  transform: translateY(3px);
-  box-shadow: 0 4px 6px rgba(0,0,0,0.25);
-}
-
-/* ===== 管理者画面 ===== */
-#admin {
-  display: none;
-  margin-top: 40px;
-}
-
-input[type="password"] {
-  font-size: 22px;
-  padding: 10px;
-  width: 160px;
-  text-align: center;
-  letter-spacing: 6px;   /* 数字が見えにくくなる */
-}
-
-#adminMsg {
-  margin-top: 20px;
-  color: red;
-  font-weight: bold;
-}
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>勤務確認</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
+  <!-- ====== HOME ====== -->
+  <section id="view-home" class="view active">
+    <header class="topbar">
+      <div class="brand">MKB 春日井</div>
+      <button class="admin-mini" id="btn-admin">管理者</button>
+    </header>
 
-<header>
-  <div>MKB 春日井</div>
-  <button class="admin-btn" onclick="openAdmin()">管理者</button>
-</header>
+    <main class="home">
+      <div class="title">勤務確認</div>
 
-<!-- ===== 初期画面 ===== -->
-<div id="home">
-  <div id="title">勤務確認</div>
-  <button id="goBtn">GO</button>
-</div>
+      <button class="go" id="btn-go" aria-label="GOボタン">
+        GO
+      </button>
 
-<!-- ===== 管理者画面 ===== -->
-<div id="admin">
-  <h2>管理者画面</h2>
-  <p>暗証番号を入力してください</p>
-  <input type="password" id="pin" inputmode="numeric" maxlength="4">
-  <br><br>
-  <button onclick="checkPin()">ログイン</button>
-  <div id="adminMsg"></div>
-</div>
+      <div class="hint" id="whoami"></div>
+    </main>
+  </section>
+
+  <!-- ====== NAME ====== -->
+  <section id="view-name" class="view">
+    <header class="topbar">
+      <div class="brand">MKB 春日井</div>
+      <button class="back-mini" data-back="home">戻る</button>
+    </header>
+
+    <main class="panel">
+      <h2>お名前を入力してください</h2>
+      <p class="muted">※一度入力すると、このスマホに保存されます。</p>
+
+      <input id="nameInput" class="text" type="text" inputmode="text" placeholder="例：青山" maxlength="20" />
+      <button class="primary" id="saveName">保存</button>
+    </main>
+  </section>
+
+  <!-- ====== PDF ====== -->
+  <section id="view-pdf" class="view">
+    <header class="topbar">
+      <div class="brand">点呼簿</div>
+      <button class="back-mini" data-back="home">戻る</button>
+    </header>
+
+    <main class="pdf-wrap">
+      <!-- ★ ここが点呼簿PDF（GitHubに tenko.pdf を置いてください） -->
+      <iframe class="pdf" title="点呼簿PDF" src="tenko.pdf"></iframe>
+
+      <div class="checkbar">
+        <div class="check-left">
+          <div class="check-title">確認</div>
+          <div class="check-sub" id="deadlineText">締切：16:30</div>
+        </div>
+
+        <div class="check-right">
+          <button class="check-btn" id="btn-check">確認しました</button>
+          <div class="after-msg" id="afterMsg"></div>
+        </div>
+      </div>
+
+      <div class="confirmed-box">
+        <div class="confirmed-title">本日の確認者</div>
+        <div class="confirmed-list" id="confirmedList"></div>
+      </div>
+    </main>
+  </section>
+
+  <!-- ====== ADMIN ====== -->
+  <section id="view-admin" class="view">
+    <header class="topbar">
+      <div class="brand">管理者</div>
+      <button class="back-mini" data-back="home">戻る</button>
+    </header>
+
+    <main class="panel">
+      <h2>暗証番号</h2>
+      <p class="muted">4桁（設定：0900）</p>
+
+      <!-- ★ 透け対策：type="password" ＋ valueは入れない -->
+      <input id="pinInput" class="text pin" type="password" inputmode="numeric" pattern="[0-9]*" placeholder="●●●●" maxlength="4" />
+      <button class="primary" id="unlock">開く</button>
+
+      <div class="admin-area" id="adminArea">
+        <h3>管理メニュー</h3>
+        <p class="muted">※ここは後で機能を追加します（PDF差し替え、削除など）。</p>
+      </div>
+    </main>
+  </section>
 
 <script>
-function openAdmin() {
-  document.getElementById("home").style.display = "none";
-  document.getElementById("admin").style.display = "block";
+/* ===== 基本：画面切替 ===== */
+const views = {
+  home: document.getElementById('view-home'),
+  name: document.getElementById('view-name'),
+  pdf: document.getElementById('view-pdf'),
+  admin: document.getElementById('view-admin'),
+};
+function show(viewKey){
+  Object.values(views).forEach(v => v.classList.remove('active'));
+  views[viewKey].classList.add('active');
 }
 
-function checkPin() {
-  const pin = document.getElementById("pin").value;
-  if (pin === "0900") {
-    alert("管理者ログイン成功");
-  } else {
-    document.getElementById("adminMsg").textContent = "暗証番号が違います";
+/* ===== 名前保存 ===== */
+const LS_NAME = 'mkb_name';
+function getName(){ return (localStorage.getItem(LS_NAME) || '').trim(); }
+function setName(n){ localStorage.setItem(LS_NAME, n.trim()); }
+
+const whoami = document.getElementById('whoami');
+function refreshWho(){
+  const n = getName();
+  whoami.textContent = n ? `登録名：${n}` : '未登録（GOで登録します）';
+}
+refreshWho();
+
+/* ===== GO動作 ===== */
+document.getElementById('btn-go').addEventListener('click', () => {
+  const n = getName();
+  if(!n) { show('name'); return; }
+  show('pdf');
+});
+
+/* ===== 管理者ボタン ===== */
+document.getElementById('btn-admin').addEventListener('click', () => show('admin'));
+
+/* ===== 戻る ===== */
+document.querySelectorAll('[data-back]').forEach(btn=>{
+  btn.addEventListener('click', ()=> show(btn.dataset.back));
+});
+
+/* ===== 名前保存ボタン ===== */
+document.getElementById('saveName').addEventListener('click', () => {
+  const v = document.getElementById('nameInput').value.trim();
+  if(!v){ alert('お名前を入力してください'); return; }
+  setName(v);
+  refreshWho();
+  show('pdf');
+});
+
+/* ===== 締切16:30 判定 ===== */
+function isAfterDeadline(){
+  const now = new Date();
+  const deadline = new Date();
+  deadline.setHours(16,30,0,0);
+  return now > deadline;
+}
+function todayKey(){
+  const d = new Date();
+  const y = d.getFullYear();
+  const m = String(d.getMonth()+1).padStart(2,'0');
+  const day = String(d.getDate()).padStart(2,'0');
+  return `${y}-${m}-${day}`;
+}
+
+/* ===== 確認者リスト（いまは端末側保存の簡易版） =====
+   ※本当に「全員で共有」するには、後でGoogleドライブ/スプレッドシート等に記録する仕組みが必要です。
+*/
+const LS_CONF = 'mkb_confirmed_by_day'; // JSON: { "YYYY-MM-DD": ["青山","佐藤"] }
+function loadConf(){
+  try { return JSON.parse(localStorage.getItem(LS_CONF) || '{}'); } catch { return {}; }
+}
+function saveConf(obj){ localStorage.setItem(LS_CONF, JSON.stringify(obj)); }
+
+const confirmedList = document.getElementById('confirmedList');
+function renderConfirmed(){
+  const data = loadConf();
+  const list = data[todayKey()] || [];
+  confirmedList.textContent = list.length ? list.join('、') : 'まだありません';
+}
+renderConfirmed();
+
+/* ===== チェックボタン ===== */
+const btnCheck = document.getElementById('btn-check');
+const afterMsg = document.getElementById('afterMsg');
+function refreshCheckUI(){
+  afterMsg.textContent = '';
+  const name = getName();
+  if(!name){
+    btnCheck.disabled = true;
+    btnCheck.textContent = '名前未登録';
+    return;
   }
+  if(isAfterDeadline()){
+    btnCheck.disabled = true;
+    btnCheck.textContent = '締切後';
+    afterMsg.textContent = '16:30を過ぎました。電話にて確認してください。';
+    return;
+  }
+  // すでに押したか（同一端末内）
+  const data = loadConf();
+  const list = data[todayKey()] || [];
+  const already = list.includes(name);
+  btnCheck.disabled = already;
+  btnCheck.textContent = already ? '確認済み' : '確認しました';
 }
-</script>
+refreshCheckUI();
 
+btnCheck.addEventListener('click', () => {
+  const name = getName();
+  if(!name) return;
+  if(isAfterDeadline()){
+    refreshCheckUI();
+    return;
+  }
+  const data = loadConf();
+  const key = todayKey();
+  data[key] = data[key] || [];
+  if(!data[key].includes(name)) data[key].push(name);
+  saveConf(data);
+  renderConfirmed();
+  refreshCheckUI();
+});
+
+/* ===== 管理者PIN（0900） ===== */
+const adminArea = document.getElementById('adminArea');
+adminArea.style.display = 'none';
+
+document.getElementById('unlock').addEventListener('click', ()=>{
+  const v = (document.getElementById('pinInput').value || '').trim();
+  if(v === '0900'){
+    adminArea.style.display = 'block';
+    alert('管理者画面を開きました');
+  }else{
+    alert('暗証番号が違います');
+  }
+});
+</script>
 </body>
 </html>
