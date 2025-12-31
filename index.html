@@ -4,50 +4,123 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>勤務確認</title>
-  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      margin: 0;
+      background: #fdf7e9;
+      font-family: "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+      text-align: center;
+    }
+
+    .screen {
+      display: none;
+      min-height: 100vh;
+      padding: 30px 20px;
+      box-sizing: border-box;
+    }
+
+    .active {
+      display: block;
+    }
+
+    h1 {
+      font-size: 32px;
+      color: #1e4fa1;
+      margin-bottom: 40px;
+    }
+
+    .logo {
+      font-size: 20px;
+      color: #1e4fa1;
+      margin-top: 40px;
+    }
+
+    .go-btn {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      background: linear-gradient(#6fb6ff, #2f78d6);
+      color: white;
+      font-size: 36px;
+      font-weight: bold;
+      border: none;
+      box-shadow: 0 6px 0 #1e4fa1;
+    }
+
+    input {
+      font-size: 18px;
+      padding: 10px;
+      width: 80%;
+      max-width: 300px;
+    }
+
+    .btn {
+      margin-top: 20px;
+      font-size: 18px;
+      padding: 10px 20px;
+    }
+
+    iframe {
+      width: 100%;
+      height: 70vh;
+      border: none;
+      margin-top: 20px;
+    }
+  </style>
 </head>
 
 <body>
 
 <!-- 初期画面 -->
-<div id="home" class="screen active">
-  <h1 class="title">勤務確認</h1>
-
+<div id="top" class="screen active">
+  <h1>勤務確認</h1>
   <button class="go-btn" onclick="goNext()">GO!</button>
-
-  <div class="footer">MKB 春日井</div>
+  <div class="logo">MKB 春日井</div>
 </div>
 
-<!-- 勤務確認画面（最初は非表示） -->
-<div id="check" class="screen">
-  <h2>点呼簿（PDF）</h2>
+<!-- 名前入力画面 -->
+<div id="name" class="screen">
+  <h1>名前を入力してください</h1>
+  <input id="username" placeholder="例：山田 太郎" />
+  <br />
+  <button class="btn" onclick="saveName()">決定</button>
+</div>
 
-  <!-- PDF（あとで差し替えOK） -->
-  <iframe
-    src="sample.pdf"
-    width="100%"
-    height="400px">
-  </iframe>
+<!-- 点呼簿画面 -->
+<div id="pdf" class="screen">
+  <h1>点呼簿確認</h1>
 
-  <div class="check-area">
-    <label>
-      <input type="checkbox">
-      確認しました
-    </label>
-  </div>
+  <!-- ★ここがPDF表示部分 -->
+  <iframe src="スキャン_20251104-1111.pdf"></iframe>
 
-  <button class="back-btn" onclick="goHome()">戻る</button>
+  <p>
+    <input type="checkbox" /> 確認しました
+  </p>
 </div>
 
 <script>
-  function goNext() {
-    document.getElementById("home").classList.remove("active");
-    document.getElementById("check").classList.add("active");
+  function show(id) {
+    document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+    document.getElementById(id).classList.add("active");
   }
 
-  function goHome() {
-    document.getElementById("check").classList.remove("active");
-    document.getElementById("home").classList.add("active");
+  function goNext() {
+    const name = localStorage.getItem("name");
+    if (name) {
+      show("pdf");
+    } else {
+      show("name");
+    }
+  }
+
+  function saveName() {
+    const name = document.getElementById("username").value;
+    if (!name) {
+      alert("名前を入力してください");
+      return;
+    }
+    localStorage.setItem("name", name);
+    show("pdf");
   }
 </script>
 
