@@ -1,21 +1,76 @@
 body {
   margin: 0;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  font-family: sans-serif;
+  font-family: "Segoe UI", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+  background-color: #fdfcf7;
+  text-align: center;
 }
 
+/* メニュー全体 */
 .menu {
-  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  height: 100vh;
+  padding: 0;
+}
+
+/* 各ボタン */
+.menu button {
+  width: 80%;
+  max-width: 400px;
+  height: 80px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 12px;
+  background-color: #fffefc;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+  font-size: 22px;
+  font-weight: bold;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 24px;
-  border-bottom: 1px solid #ccc;
+  gap: 10px;
+  transition: all 0.2s ease;
 }
 
-.character {
-  background: #f7f2e8;
-  font-size: 60px;
+.menu button:hover {
+  background-color: #f5f1e8;
+  transform: scale(1.02);
+}
+
+/* 区切り線 */
+.divider {
+  width: 80%;
+  height: 1px;
+  background-color: #e0dfda;
+  margin: 5px auto;
+}
+
+/* バスのキャラクター */
+.bus {
+  margin-top: 20px;
+  font-size: 50px;
+}
+
+/* サブページ */
+.page {
+  display: none;
+  padding: 20px;
+}
+
+.page.active {
+  display: block;
+}
+
+.back-btn {
+  display: inline-block;
+  margin: 10px;
+  padding: 10px 20px;
+  background: #f0f0f0;
+  border-radius: 8px;
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
 }
