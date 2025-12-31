@@ -1,361 +1,125 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>勤務確認</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>勤務確認</title>
 
-  <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" href="style.css">
+<style>
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+  background: #f7f3e8; /* クリーム色 */
+  text-align: center;
+}
 
-  <meta name="theme-color" content="#1e5aa8">
+/* ===== ヘッダー ===== */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  color: #0b3c8a;
+  font-weight: bold;
+}
+
+.admin-btn {
+  font-size: 14px;
+  padding: 6px 10px;
+  border: 1px solid #0b3c8a;
+  border-radius: 6px;
+  background: #fff;
+}
+
+/* ===== 初期画面 ===== */
+#home {
+  margin-top: 40px;
+}
+
+#title {
+  font-size: 34px; /* 勤務確認を大きく */
+  font-weight: bold;
+  color: #0b3c8a;
+  margin-bottom: 40px;
+}
+
+/* ===== GOボタン（直径約4cm相当） ===== */
+#goBtn {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  background: linear-gradient(#1f6fd8, #0b3c8a);
+  color: #fff;
+  font-size: 42px;
+  font-weight: bold;
+  border: none;
+  box-shadow: 0 8px 12px rgba(0,0,0,0.25);
+}
+
+#goBtn:active {
+  transform: translateY(3px);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.25);
+}
+
+/* ===== 管理者画面 ===== */
+#admin {
+  display: none;
+  margin-top: 40px;
+}
+
+input[type="password"] {
+  font-size: 22px;
+  padding: 10px;
+  width: 160px;
+  text-align: center;
+  letter-spacing: 6px;   /* 数字が見えにくくなる */
+}
+
+#adminMsg {
+  margin-top: 20px;
+  color: red;
+  font-weight: bold;
+}
+</style>
 </head>
+
 <body>
 
-  <!-- ====== HOME ====== -->
-  <section id="screen-home" class="screen active">
-    <header class="topbar">
-      <div class="brand">MKB春日井</div>
-      <button id="btnAdmin" class="admin-btn" type="button">管理者</button>
-    </header>
+<header>
+  <div>MKB 春日井</div>
+  <button class="admin-btn" onclick="openAdmin()">管理者</button>
+</header>
 
-    <main class="home">
-      <h1 class="title">勤務確認</h1>
+<!-- ===== 初期画面 ===== -->
+<div id="home">
+  <div id="title">勤務確認</div>
+  <button id="goBtn">GO</button>
+</div>
 
-      <button id="btnGo" class="go-btn" type="button" aria-label="GO">GO</button>
-
-      <p class="hint">GOを押して点呼簿（PDF）を確認してください</p>
-    </main>
-  </section>
-
-  <!-- ====== NAME ====== -->
-  <section id="screen-name" class="screen">
-    <header class="topbar">
-      <button class="back-btn" data-back="home" type="button">←</button>
-      <div class="brand center">名前登録</div>
-      <div class="spacer"></div>
-    </header>
-
-    <main class="panel">
-      <h2 class="panel-title">名前を入力してください</h2>
-
-      <input id="nameInput" class="text-input" type="text" placeholder="例：青山 太郎" maxlength="20" autocomplete="name" />
-
-      <button id="saveNameBtn" class="primary-btn" type="button">保存して次へ</button>
-
-      <p class="small-note">※一度保存すると、このスマホに記憶されます</p>
-    </main>
-  </section>
-
-  <!-- ====== DUTY (PDF) ====== -->
-  <section id="screen-duty" class="screen">
-    <header class="topbar">
-      <button class="back-btn" data-back="home" type="button">←</button>
-      <div class="brand center">点呼簿確認</div>
-      <div class="spacer"></div>
-    </header>
-
-    <main class="panel">
-      <div class="info-row">
-        <div id="todayLabel" class="date-label"></div>
-        <div id="deadlineLabel" class="deadline"></div>
-      </div>
-
-      <div id="latestBadge" class="latest-badge">最新</div>
-
-      <!-- PDF表示 -->
-      <div class="pdf-box">
-        <object id="pdfObj" data="" type="application/pdf" width="100%" height="100%">
-          <p>PDFが表示できません。<a id="pdfLink" href="#" target="_blank" rel="noopener">ここをタップして開く</a></p>
-        </object>
-      </div>
-
-      <!-- 16:30を過ぎたら出すメッセージ -->
-      <div id="closedBox" class="closed-box hidden">
-        <div class="closed-title">受付は終了しました。</div>
-        <div class="closed-text">電話にて確認してください。</div>
-      </div>
-
-      <!-- 確認チェック -->
-      <div class="check-row">
-        <label class="check-label">
-          <input id="confirmCheck" type="checkbox">
-          <span>確認しました</span>
-        </label>
-        <button id="confirmBtn" class="primary-btn small" type="button">送信</button>
-      </div>
-
-      <div class="confirmers">
-        <div class="confirmers-title">今日の確認者（この端末の記録）</div>
-        <div id="confirmersList" class="confirmers-list">まだありません</div>
-      </div>
-
-      <p class="small-note">※「全員で共有して誰が確認したか」をやるには、別途データ保存先（Firebase等）が必要です。</p>
-    </main>
-  </section>
-
-  <!-- ====== ADMIN PIN ====== -->
-  <section id="screen-admin-pin" class="screen">
-    <header class="topbar">
-      <button class="back-btn" data-back="home" type="button">←</button>
-      <div class="brand center">管理者</div>
-      <div class="spacer"></div>
-    </header>
-
-    <main class="panel">
-      <h2 class="panel-title">暗証番号（4桁）</h2>
-      <input id="pinInput" class="text-input center" type="password" inputmode="numeric" maxlength="4" placeholder="0900" />
-      <button id="pinBtn" class="primary-btn" type="button">開く</button>
-      <div id="pinMsg" class="error-msg hidden">暗証番号が違います</div>
-    </main>
-  </section>
-
-  <!-- ====== ADMIN ====== -->
-  <section id="screen-admin" class="screen">
-    <header class="topbar">
-      <button class="back-btn" data-back="home" type="button">←</button>
-      <div class="brand center">管理者設定</div>
-      <div class="spacer"></div>
-    </header>
-
-    <main class="panel">
-      <h2 class="panel-title">表示するPDFを指定</h2>
-
-      <div class="form-row">
-        <label class="form-label">PDFファイル名（pdfフォルダ内）</label>
-        <input id="pdfFileInput" class="text-input" type="text" placeholder="例：tenko_20251104.pdf" />
-        <div class="small-note">リポジトリの <b>pdf/</b> にPDFをアップしてから、ここにファイル名を入れます。</div>
-      </div>
-
-      <div class="form-row">
-        <label class="form-label">締切（毎日）</label>
-        <input id="deadlineInput" class="text-input" type="time" value="16:30" />
-      </div>
-
-      <button id="adminSaveBtn" class="primary-btn" type="button">保存</button>
-
-      <hr class="sep">
-
-      <h2 class="panel-title">管理者メモ</h2>
-      <p class="small-note">
-        ・PDFの「自動削除」は GitHub Pages だけだと自動ではできません。<br>
-        ・不要なPDFは管理者がGitHub上で削除（または差し替え）します。<br>
-        ・「最新を赤枠」表示はこの画面で指定したPDFを最新扱いにします。
-      </p>
-
-      <button id="resetLocalBtn" class="ghost-btn" type="button">この端末の確認記録をリセット</button>
-    </main>
-  </section>
+<!-- ===== 管理者画面 ===== -->
+<div id="admin">
+  <h2>管理者画面</h2>
+  <p>暗証番号を入力してください</p>
+  <input type="password" id="pin" inputmode="numeric" maxlength="4">
+  <br><br>
+  <button onclick="checkPin()">ログイン</button>
+  <div id="adminMsg"></div>
+</div>
 
 <script>
-/* =====================
-   設定（変更する場所）
-===================== */
-const ADMIN_PIN = "0900"; // ←ご希望の暗証番号
-const DEFAULT_PDF = "";   // ここは空でOK（管理者画面で設定します）
-
-/* =====================
-   共通ユーティリティ
-===================== */
-const $ = (id) => document.getElementById(id);
-
-function todayKey(){
-  const d = new Date();
-  const y = d.getFullYear();
-  const m = String(d.getMonth()+1).padStart(2,"0");
-  const day = String(d.getDate()).padStart(2,"0");
-  return `${y}-${m}-${day}`;
+function openAdmin() {
+  document.getElementById("home").style.display = "none";
+  document.getElementById("admin").style.display = "block";
 }
 
-function formatJPDate(key){
-  const [y,m,d] = key.split("-");
-  return `${y}年${Number(m)}月${Number(d)}日`;
-}
-
-function showScreen(name){
-  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
-  $("screen-" + name).classList.add("active");
-  window.scrollTo(0,0);
-}
-
-/* =====================
-   保存データ
-===================== */
-const LS = {
-  name: "mkb_name",
-  pdfFile: "mkb_pdf_file",
-  deadline: "mkb_deadline", // "16:30"
-  confirmersByDate: "mkb_confirmers" // { "YYYY-MM-DD": ["青山", ...] }
-};
-
-function getConfirmersObj(){
-  try { return JSON.parse(localStorage.getItem(LS.confirmersByDate) || "{}"); }
-  catch { return {}; }
-}
-
-function setConfirmersObj(obj){
-  localStorage.setItem(LS.confirmersByDate, JSON.stringify(obj));
-}
-
-function addConfirmer(dateKey, person){
-  const obj = getConfirmersObj();
-  obj[dateKey] = obj[dateKey] || [];
-  if(!obj[dateKey].includes(person)) obj[dateKey].push(person);
-  setConfirmersObj(obj);
-}
-
-/* =====================
-   締切チェック
-===================== */
-function isAfterDeadline(){
-  const dl = localStorage.getItem(LS.deadline) || "16:30";
-  const [hh, mm] = dl.split(":").map(Number);
-  const now = new Date();
-  const deadline = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hh, mm, 0, 0);
-  return now.getTime() > deadline.getTime();
-}
-
-function updateDeadlineUI(){
-  const dl = localStorage.getItem(LS.deadline) || "16:30";
-  $("deadlineLabel").textContent = `締切：${dl}`;
-}
-
-/* =====================
-   PDF表示
-===================== */
-function getPdfFile(){
-  return localStorage.getItem(LS.pdfFile) || DEFAULT_PDF;
-}
-
-function setPdfFile(file){
-  localStorage.setItem(LS.pdfFile, file);
-}
-
-function loadPdf(){
-  const file = getPdfFile();
-  const date = todayKey();
-
-  $("todayLabel").textContent = formatJPDate(date);
-
-  // 最新バッジ：PDFが設定されているときだけ表示
-  if(file){
-    $("latestBadge").classList.remove("hidden");
-  }else{
-    $("latestBadge").classList.add("hidden");
-  }
-
-  // PDFセット
-  const url = file ? `pdf/${encodeURIComponent(file)}` : "";
-  $("pdfObj").data = url;
-  $("pdfLink").href = url || "#";
-
-  updateDeadlineUI();
-
-  // 締切後は操作禁止 + メッセージ表示
-  const closed = isAfterDeadline();
-  $("closedBox").classList.toggle("hidden", !closed);
-  $("confirmCheck").disabled = closed;
-  $("confirmBtn").disabled = closed;
-
-  renderConfirmers();
-}
-
-function renderConfirmers(){
-  const obj = getConfirmersObj();
-  const list = obj[todayKey()] || [];
-  $("confirmersList").textContent = list.length ? list.join("、") : "まだありません";
-}
-
-/* =====================
-   画面遷移ロジック
-===================== */
-function goFlow(){
-  const name = localStorage.getItem(LS.name);
-  if(!name){
-    showScreen("name");
-  }else{
-    showScreen("duty");
-    loadPdf();
+function checkPin() {
+  const pin = document.getElementById("pin").value;
+  if (pin === "0900") {
+    alert("管理者ログイン成功");
+  } else {
+    document.getElementById("adminMsg").textContent = "暗証番号が違います";
   }
 }
-
-/* =====================
-   イベント
-===================== */
-$("btnGo").addEventListener("click", goFlow);
-
-$("saveNameBtn").addEventListener("click", () => {
-  const v = $("nameInput").value.trim();
-  if(!v){ alert("名前を入力してください"); return; }
-  localStorage.setItem(LS.name, v);
-  showScreen("duty");
-  loadPdf();
-});
-
-$("confirmBtn").addEventListener("click", () => {
-  if(isAfterDeadline()){
-    loadPdf();
-    return;
-  }
-  const checked = $("confirmCheck").checked;
-  if(!checked){ alert("チェックを入れてください"); return; }
-
-  const name = localStorage.getItem(LS.name) || "";
-  if(!name){ showScreen("name"); return; }
-
-  addConfirmer(todayKey(), name);
-  $("confirmCheck").checked = false;
-  renderConfirmers();
-  alert("確認しましたを記録しました（この端末）");
-});
-
-document.querySelectorAll(".back-btn").forEach(btn=>{
-  btn.addEventListener("click", () => showScreen(btn.dataset.back));
-});
-
-$("btnAdmin").addEventListener("click", () => {
-  $("pinInput").value = "";
-  $("pinMsg").classList.add("hidden");
-  showScreen("admin-pin");
-});
-
-$("pinBtn").addEventListener("click", () => {
-  const v = $("pinInput").value.trim();
-  if(v === ADMIN_PIN){
-    // 管理画面に現在値を反映
-    $("pdfFileInput").value = getPdfFile();
-    $("deadlineInput").value = localStorage.getItem(LS.deadline) || "16:30";
-    showScreen("admin");
-  }else{
-    $("pinMsg").classList.remove("hidden");
-  }
-});
-
-$("adminSaveBtn").addEventListener("click", () => {
-  const file = $("pdfFileInput").value.trim();
-  const dl = $("deadlineInput").value || "16:30";
-  setPdfFile(file);
-  localStorage.setItem(LS.deadline, dl);
-  alert("保存しました");
-});
-
-$("resetLocalBtn").addEventListener("click", () => {
-  if(confirm("この端末の確認記録をリセットします。よろしいですか？")){
-    localStorage.removeItem(LS.confirmersByDate);
-    alert("リセットしました");
-  }
-});
-
-/* 初期化 */
-(function init(){
-  // PWA SW
-  if("serviceWorker" in navigator){
-    navigator.serviceWorker.register("sw.js").catch(()=>{});
-  }
-
-  // 何も設定されていない場合の初期値
-  if(!localStorage.getItem(LS.deadline)) localStorage.setItem(LS.deadline, "16:30");
-})();
 </script>
 
 </body>
