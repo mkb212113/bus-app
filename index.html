@@ -1,25 +1,27 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <!-- これが超重要：スマホ文字が小さくなるのを防ぐ -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>バスアプリ</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+
+<!-- ホーム -->
+<div id="home">
   <div class="container">
-    <div class="box">
+    <div class="box" onclick="showPage('duty')">
       <div class="icon">🕒</div>
       <div class="label">勤務確認</div>
     </div>
 
-    <div class="box">
+    <div class="box" onclick="showPage('notice')">
       <div class="icon">📣</div>
       <div class="label">連絡事項</div>
     </div>
 
-    <div class="box">
+    <div class="box" onclick="showPage('share')">
       <div class="icon">📁</div>
       <div class="label">情報共有</div>
     </div>
@@ -28,5 +30,42 @@
       <div class="bus-area">🚌</div>
     </div>
   </div>
+</div>
+
+<!-- 勤務確認 -->
+<div id="duty" class="page">
+  <button class="back-btn" onclick="goHome()">← 戻る</button>
+  <h1>勤務確認</h1>
+  <p>ここに点呼簿写真アップロード機能を追加していきます。</p>
+</div>
+
+<!-- 連絡事項 -->
+<div id="notice" class="page">
+  <button class="back-btn" onclick="goHome()">← 戻る</button>
+  <h1>連絡事項</h1>
+  <p>ここに管理者投稿・新着表示を追加していきます。</p>
+</div>
+
+<!-- 情報共有 -->
+<div id="share" class="page">
+  <button class="back-btn" onclick="goHome()">← 戻る</button>
+  <h1>情報共有</h1>
+  <p>ここに写真・コメント投稿機能を追加していきます。</p>
+</div>
+
+<script>
+  function showPage(id) {
+    document.getElementById('home').style.display = 'none';
+    document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
+    document.getElementById(id).style.display = 'block';
+    window.scrollTo(0, 0);
+  }
+  function goHome() {
+    document.getElementById('home').style.display = 'block';
+    document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
+    window.scrollTo(0, 0);
+  }
+</script>
+
 </body>
 </html>
