@@ -1,204 +1,290 @@
 :root{
-  --bg: #fbf6ea;        /* クリーム */
-  --blue: #1e4fa8;      /* 基調ブルー */
-  --blue2:#2f6ae0;
-  --text:#12305e;
+  --cream:#fbf3e6;
+  --blue:#1f6fd6;
+  --blue2:#2a86ff;
+  --text:#111;
+  --card:#ffffff;
+  --shadow: 0 10px 24px rgba(0,0,0,.08);
+  --radius:18px;
 }
 
-*{ box-sizing:border-box; }
-
+/* 全体 */
+html,body{
+  height:100%;
+}
 body{
   margin:0;
-  font-family: system-ui, -apple-system, "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
-  background: var(--bg);
-  color: var(--text);
+  background:var(--cream);
+  color:var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
 }
 
-/* 画面 */
-.view{ display:none; min-height:100vh; }
-.view.active{ display:block; }
-
-/* 上部 */
+/* 上部バー（下は作らない） */
 .topbar{
+  position: sticky;
+  top: 0;
+  z-index: 50;
   display:flex;
   align-items:center;
   justify-content:space-between;
-  padding:14px 16px;
+  padding: 12px 14px;
+  background: rgba(251,243,230,.92);
+  backdrop-filter: blur(6px);
 }
-
 .brand{
-  font-weight:800;
-  color:var(--blue);
-  font-size:18px;
-  letter-spacing:0.5px;
+  font-weight: 900;
+  letter-spacing: .02em;
 }
-
-.admin-mini, .back-mini{
-  border:none;
-  background: transparent;
+.adminBtn{
+  border: 2px solid var(--blue);
+  background: #fff;
   color: var(--blue);
-  font-weight:700;
-  font-size:14px;
-  padding:8px 10px;
-  border-radius:10px;
+  font-weight: 800;
+  border-radius: 10px;
+  padding: 6px 10px;
 }
-.admin-mini:hover, .back-mini:hover{ background: rgba(30,79,168,0.08); }
 
-/* HOME */
-.home{
-  min-height: calc(100vh - 56px);
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:18px;
-  padding: 10px 16px 28px;
+/* 画面切替 */
+.screen{
+  display:none;
+  padding: 18px 16px 28px;
+  max-width: 520px;
+  margin: 0 auto;
+}
+.screen.active{
+  display:block;
 }
 
 .title{
-  font-size: 34px; /* 「勤務確認」を一回り大きく */
-  font-weight: 900;
+  margin: 14px 0 18px;
+  text-align:center;
+  font-size: 34px;
   color: var(--blue);
+  font-weight: 1000;
+  letter-spacing: .04em;
+}
+.subTitle{
+  margin: 16px 0 14px;
+  text-align:center;
+  font-size: 26px;
+  color: var(--blue);
+  font-weight: 1000;
 }
 
+/* GOボタン：きれいな真円＆大きめ */
+.goBtn{
+  display:block;
+  margin: 0 auto;
+  width: 150px;     /* ここを大きくするとさらに大きく */
+  height: 150px;    /* 同じ値＝真円 */
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+
+  background: radial-gradient(circle at 30% 25%, #7cc6ff, #1f6fd6 60%, #0f4ea8 100%);
+  box-shadow:
+    0 14px 26px rgba(0,0,0,.18),
+    inset 0 10px 18px rgba(255,255,255,.25),
+    inset 0 -10px 18px rgba(0,0,0,.22);
+  color:#fff;
+  font-weight: 1000;
+  font-size: 44px;
+  letter-spacing: .08em;
+  text-shadow: 0 3px 6px rgba(0,0,0,.35);
+}
+
+/* ヒント */
 .hint{
-  margin-top:6px;
-  font-size:14px;
-  color: rgba(18,48,94,0.75);
+  margin: 16px auto 0;
+  text-align:center;
+  color:#333;
 }
+.small{ font-size: 12px; opacity:.75; }
 
-/* GO：直径約4cm相当（スマホで大きめに固定） */
-.go{
-  width: 170px;
-  height: 170px;
-  border-radius: 9999px;
-  border: 0;
-  background: linear-gradient(180deg, var(--blue2), var(--blue));
-  color: #fff;
+/* カード */
+.card{
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 14px;
+}
+.label{
   font-weight: 900;
-  font-size: 40px;
-  letter-spacing: 1px;
-  box-shadow:
-    0 10px 18px rgba(0,0,0,0.22),
-    inset 0 6px 10px rgba(255,255,255,0.22);
+  margin: 6px 0 6px;
 }
-.go:active{
-  transform: translateY(1px);
-  box-shadow:
-    0 7px 14px rgba(0,0,0,0.22),
-    inset 0 5px 10px rgba(255,255,255,0.18);
+.label.small{
+  font-weight: 700;
+  font-size: 12px;
+  opacity:.85;
 }
-
-/* パネル共通 */
-.panel{
-  padding: 18px 16px 28px;
-}
-h2{ margin:10px 0 6px; color: var(--blue); }
-h3{ margin:16px 0 6px; color: var(--blue); }
-.muted{ color: rgba(18,48,94,0.7); margin: 0 0 12px; }
-
-.text{
+.textInput{
   width:100%;
-  max-width: 420px;
-  padding:14px 14px;
-  border-radius:14px;
-  border: 1px solid rgba(18,48,94,0.18);
-  font-size:16px;
-  background:#fff;
+  box-sizing:border-box;
+  border: 2px solid rgba(31,111,214,.2);
+  border-radius: 12px;
+  padding: 12px 12px;
+  font-size: 16px;
   outline:none;
 }
-
-.pin{
-  letter-spacing: 6px;
-  /* iPhoneで「透けて見える」対策（念のため） */
-  -webkit-text-security: disc;
+.textInput:focus{
+  border-color: rgba(31,111,214,.55);
 }
 
-.primary{
-  margin-top:12px;
-  width:100%;
-  max-width:420px;
-  padding:14px 14px;
-  border-radius:14px;
-  border:0;
+/* ボタン */
+.primaryBtn{
+  display:inline-block;
+  margin-top: 10px;
   background: var(--blue);
   color:#fff;
-  font-weight:800;
-  font-size:16px;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.18);
-}
-.primary:active{ transform: translateY(1px); }
-
-/* PDF */
-.pdf-wrap{
-  padding: 8px 10px 20px;
-}
-
-.pdf{
-  width:100%;
-  height: 62vh;
-  border: 2px solid rgba(30,79,168,0.18);
+  border:none;
   border-radius: 14px;
-  background:#fff;
+  padding: 12px 14px;
+  font-weight: 900;
+  font-size: 16px;
+  box-shadow: 0 10px 18px rgba(31,111,214,.25);
 }
-
-.checkbar{
-  margin-top:10px;
-  display:flex;
-  gap:10px;
-  align-items:center;
-  justify-content:space-between;
-  padding: 12px 12px;
-  border-radius: 14px;
-  background: rgba(255,255,255,0.8);
-  border: 1px solid rgba(18,48,94,0.12);
+.primaryBtn.full{ width:100%; text-align:center; box-sizing:border-box; }
+.primaryBtn:disabled{
+  opacity:.55;
 }
-
-.check-title{
-  font-weight:900;
+.primaryBtn.disabled{
+  pointer-events:none;
+  opacity:.55;
+}
+.linkBtn{
+  margin-top: 10px;
+  background: transparent;
+  border:none;
   color: var(--blue);
+  font-weight: 900;
+  font-size: 15px;
+  text-decoration: underline;
 }
-.check-sub{
-  font-size:12px;
-  color: rgba(18,48,94,0.7);
-}
-
-.check-right{
-  display:flex;
-  flex-direction:column;
-  align-items:flex-end;
-  gap:6px;
-}
-
-.check-btn{
-  border:0;
+.dangerBtn{
+  margin-top: 10px;
+  border: 2px solid #d11;
+  background: #fff;
+  color: #d11;
+  font-weight: 900;
   border-radius: 12px;
   padding: 10px 12px;
-  background: var(--blue);
-  color:#fff;
-  font-weight:900;
-}
-.check-btn:disabled{
-  opacity:0.6;
 }
 
-.after-msg{
-  font-size:12px;
-  color: rgba(18,48,94,0.8);
+/* 点呼簿 */
+.sectionHead{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-top: 6px;
+}
+.dateLine{
+  font-weight: 900;
+  opacity:.8;
+}
+.badgeNew{
+  background: #fff;
+  border: 2px solid #d00;
+  color:#d00;
+  font-weight: 1000;
+  border-radius: 999px;
+  padding: 4px 10px;
 }
 
-.confirmed-box{
-  margin-top:10px;
-  padding: 12px 12px;
+.pdfCard{
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 14px;
+}
+.pdfInfo{
+  margin-bottom: 10px;
+}
+.pdfName{
+  font-weight: 900;
+  margin-bottom: 8px;
+  word-break: break-all;
+}
+.pdfFrame{
+  width:100%;
+  height: 48vh;
+  border: 1px solid rgba(0,0,0,.08);
   border-radius: 14px;
-  background: rgba(255,255,255,0.8);
-  border: 1px solid rgba(18,48,94,0.12);
+  background:#fafafa;
 }
-.confirmed-title{
-  font-weight:900;
+
+/* チェック行：1行に収めやすくする */
+.confirmRow{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: 10px;
+  margin-top: 12px;
+}
+.checkWrap{
+  display:flex;
+  align-items:center;
+  gap: 8px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+.checkWrap input{
+  width: 20px;
+  height: 20px;
+}
+.miniInfo{
+  margin-top: 10px;
+  font-size: 13px;
+  opacity:.85;
+  word-break: break-word;
+}
+
+/* 締切後 */
+.closedWrap{
+  text-align:center;
+  margin-top: 8px;
+}
+.closedText{
+  font-weight: 900;
+  font-size: 18px;
+}
+.phoneIcon{
+  font-size: 64px;
+  margin-top: 10px;
+}
+
+/* 管理者一覧 */
+.hr{ border:none; border-top:1px solid rgba(0,0,0,.1); margin: 14px 0; }
+.adminList{
+  margin-top: 10px;
+}
+.adminDay{
+  border: 1px solid rgba(0,0,0,.08);
+  border-radius: 14px;
+  padding: 10px;
+  margin-bottom: 10px;
+  background: #fff;
+}
+.adminDayTitle{
+  font-weight: 1000;
   color: var(--blue);
-  margin-bottom:6px;
+  margin-bottom: 6px;
 }
-.confirmed-list{
-  font-size:14px;
+.adminDayBody{
+  font-size: 14px;
+}
+.muted{ opacity:.65; }
+
+.adminActions{
+  display:flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* スマホ最適化 */
+@media (max-width: 360px){
+  .title{ font-size: 30px; }
+  .subTitle{ font-size: 22px; }
+  .goBtn{ width: 140px; height: 140px; font-size: 40px; }
+  .confirmRow{ flex-direction: column; align-items: stretch; }
+  .checkWrap{ justify-content: center; }
 }
