@@ -4,98 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>部署アプリ</title>
-  <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- ホーム画面 -->
-  <main id="home" class="screen active">
-    <button class="menu duty" data-go="duty">🕒 勤務確認</button>
-    <button class="menu notice" data-go="notice">📢 連絡事項</button>
-    <button class="menu share" data-go="share">📁 情報共有</button>
-    <div class="menu character">🚌</div>
-  </main>
-
-  <!-- 勤務確認 -->
-  <main id="duty" class="screen">
-    <header class="topbar">
-      <button class="back" data-back>←</button>
-      <h1>勤務確認</h1>
-    </header>
-    <div class="content">
-      <p>ここに点呼簿写真アップロード機能を追加していきます。</p>
-    </div>
-  </main>
-
-  <!-- 連絡事項 -->
-  <main id="notice" class="screen">
-    <header class="topbar">
-      <button class="back" data-back>←</button>
-      <h1>連絡事項</h1>
-    </header>
-    <div class="content">
-      <p>ここに管理者投稿・新着表示を追加していきます。</p>
-    </div>
-  </main>
-
-  <!-- 情報共有 -->
-  <main id="share" class="screen">
-    <header class="topbar">
-      <button class="back" data-back>←</button>
-      <h1>情報共有</h1>
-    </header>
-    <div class="content">
-      <p>ここに写真・コメント投稿機能を追加していきます。</p>
-    </div>
-  </main>
-
-  <script>
-    const screens = [...document.querySelectorAll(".screen")];
-
-    function show(id) {
-      screens.forEach(s => s.classList.remove("active"));
-      document.getElementById(id).classList.add("active");
-      // 戻るボタンのために履歴に積む
-      history.pushState({ id }, "", "#" + id);
-    }
-
-    // メニュー押下
-    document.addEventListener("click", (e) => {
-      const go = e.target?.dataset?.go;
-      if (go) show(go);
-
-      if (e.target?.dataset?.back !== undefined) {
-        history.back();
-      }
-    });
-
-    // ブラウザ戻る対応
-    window.addEventListener("popstate", () => {
-      const id = (location.hash || "#home").replace("#", "");
-      screens.forEach(s => s.classList.remove("active"));
-      document.getElementById(id).classList.add("active");
-    });
-
-    // 初期表示
-    window.dispatchEvent(new PopStateEvent("popstate"));
-  </script>
-</body>
-</html>
-
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>部署アプリ</title>
-  <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <div class="menu duty">🕒 勤務確認</div>
-  <div class="menu notice">📢 連絡事項</div>
-  <div class="menu share">📁 情報共有</div>
+  <a class="menu duty" href="duty.html">🕒 勤務確認</a>
+  <a class="menu notice" href="notice.html">📣 連絡事項</a>
+  <a class="menu share" href="share.html">📁 情報共有</a>
   <div class="menu character">🚌</div>
 </body>
 </html>
-
