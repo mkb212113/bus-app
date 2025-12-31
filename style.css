@@ -67,10 +67,19 @@ body {
 .back-btn {
   display: inline-block;
   margin: 10px;
-  padding: 10px 20px;
+  padding: 10px 20px;body {
+  margin: 0;
+  font-family: "Segoe UI", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+  background-color: #fdfcf7;
+  text-align: center;
+  font-size: 18px;   /* ← これを追加 */
+  line-height: 1.6; /* ← これを追加 */
+}
+
   background: #f0f0f0;
   border-radius: 8px;
   text-decoration: none;
   color: #333;
   font-weight: bold;
 }
+
