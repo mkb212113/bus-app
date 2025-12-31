@@ -1,73 +1,72 @@
-* { box-sizing: border-box; }
+:root{
+  --cream:#fbf4e8;
+  --blue:#1f4c8a;
+  --blue2:#2e6bd4;
+}
 
-body {
+html, body{
+  height: 100%;
+}
+
+body{
   margin: 0;
-  font-family: system-ui, -apple-system, "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
-  background: #f7f2e8;
+  background: var(--cream);
+  font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", system-ui, sans-serif;
+  color: var(--blue);
 }
 
-.screen {
-  height: 100vh;
+.screen{
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 56px 20px 48px;
+  box-sizing: border-box;
 }
 
-.hidden { display: none; }
+.title{
+  font-size: 44px;          /* 勤務確認を一回り大きく */
+  font-weight: 900;         /* ゴシック調で太め */
+  letter-spacing: 0.02em;
+  text-align: center;
+  color: var(--blue);
+}
 
-/* メニュー（4分割） */
-.menu-item {
-  flex: 1;
+.go-btn{
+  width: 220px;
+  height: 220px;
+  border-radius: 999px;
+  border: 8px solid var(--blue);
+  background: radial-gradient(circle at 30% 25%, #7fc1ff 0%, var(--blue2) 55%, var(--blue) 100%);
+  color: #fff;
+  font-size: 64px;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+
+  /* 立体風 */
+  box-shadow:
+    0 18px 0 rgba(0,0,0,0.10),
+    0 26px 40px rgba(0,0,0,0.20);
+  transform: translateY(-8px);
+  cursor: pointer;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 24px;
-  font-weight: 700;
-  border-bottom: 2px solid #e0d7c8;
-  background: #fffefc;
 }
 
-.menu-item:active {
-  background: #f1eadc;
+.go-btn:active{
+  transform: translateY(0px);
+  box-shadow:
+    0 10px 0 rgba(0,0,0,0.10),
+    0 18px 28px rgba(0,0,0,0.20);
 }
 
-/* 下のキャラ枠 */
-.bus-area {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  background: #f7f2e8;
-}
-
-.bus { font-size: 64px; line-height: 1; }
-.bus-text { margin-top: 8px; font-weight: 700; }
-
-/* ページ用 */
-.page-title {
-  padding: 16px;
-  font-size: 22px;
-  font-weight: 800;
+.footer{
+  font-size: 34px;
+  font-weight: 900;
   text-align: center;
-}
-
-.page-box {
-  margin: 16px;
-  padding: 16px;
-  background: #fffefc;
-  border: 2px solid #e0d7c8;
-  border-radius: 12px;
-  font-size: 20px;
-  text-align: center;
-}
-
-.back-btn {
-  margin: 0 16px 16px;
-  height: 48px;
-  border: none;
-  border-radius: 12px;
-  background: #fffefc;
-  border: 2px solid #e0d7c8;
-  font-size: 18px;
-  font-weight: 700;
+  color: var(--blue);
+  /* 枠は付けない */
 }
