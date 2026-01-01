@@ -84,7 +84,7 @@ body{
   margin-top: 6px;
 }
 .deadlineText{
-  font-size: 20px;      /* ここで締切文字サイズ */
+  font-size: 28px;      /* ここで締切文字サイズ */
   font-weight: 800;
   letter-spacing: .02em;
 }
@@ -254,7 +254,7 @@ body{
 .closedTitle{
   text-align:center;
   margin: 18px 0 8px;
-  font-size: 34px;   /* ←ここで「ネット確認は終了しました」を小さく/大きく */
+  font-size: 25px;   /* ←ここで「ネット確認は終了しました」を小さく/大きく */
   font-weight: 900;
   color: var(--blue);
 }
@@ -406,5 +406,6 @@ body{
   .goBtn{ width: 200px; height: 200px; font-size: 52px; }
   .deadlineText{ font-size: 26px; }
 }
+
 
 
