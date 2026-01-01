@@ -33,7 +33,7 @@ body{
 }
 .brand{
   font-weight: 900;
-  letter-spacing: .02em;
+  letter-spacing: .05em;
 }
 .adminBtn{
   border: 2px solid var(--blue);
@@ -301,6 +301,7 @@ body{
   max-width: 40vw;   /* スマホ対応 */
   opacity: 0.95;
 }
+
 
 
 
