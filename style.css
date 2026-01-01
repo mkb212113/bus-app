@@ -290,4 +290,17 @@ body{
 }
 
 
+/* バスのイラスト（GOボタンの下） */
+.bus-illustration {
+  margin-top: 30px;
+  text-align: center;
+}
+
+.bus-illustration img {
+  width: 120px;      /* バスの大きさ */
+  max-width: 40vw;   /* スマホ対応 */
+  opacity: 0.95;
+}
+
+
 
