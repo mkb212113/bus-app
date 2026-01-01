@@ -75,8 +75,8 @@ body{
 .goBtn{
   display:block;
   margin: 0 auto;
-  width: 150px;     /* ここを大きくするとさらに大きく */
-  height: 150px;    /* 同じ値＝真円 */
+  width: 200px;     /* ここを大きくするとさらに大きく */
+  height: 200px;    /* 同じ値＝真円 */
   border-radius: 50%;
   border: none;
   cursor: pointer;
@@ -288,3 +288,4 @@ body{
   .confirmRow{ flex-direction: column; align-items: stretch; }
   .checkWrap{ justify-content: center; }
 }
+
