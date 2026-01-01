@@ -1,298 +1,408 @@
 :root{
-  --bg: #FFF3D8;          /* クリーム背景 */
-  --blue: #0B3D91;        /* 全体青 */
-  --blue2:#0A337A;
-  --text:#0B3D91;
-  --card:#ffffff;
-  --line: rgba(11,61,145,.18);
+  --bg: #fbf2e3;        /* クリーム */
+  --blue: #1f66d1;
+  --blue2:#0f4fb6;
+  --text: #222;
 }
 
-*{ box-sizing: border-box; }
-
+*{ box-sizing:border-box; }
+html,body{ height:100%; }
 body{
   margin:0;
-  font-family: system-ui, -apple-system, "Segoe UI", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+  font-family: system-ui, -apple-system, "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Yu Gothic", "Meiryo", sans-serif;
   background: var(--bg);
   color: var(--text);
 }
 
+/* 上部バー */
+.topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding: 12px 14px;
+  background: rgba(251,242,227,.92);
+  backdrop-filter: blur(6px);
+}
+.brand{
+  font-weight: 900;
+  letter-spacing: .02em;
+  font-size: 20px;
+}
+.adminBtn{
+  border: 2px solid var(--blue);
+  background: #fff;
+  color: var(--blue);
+  font-weight: 800;
+  border-radius: 12px;
+  padding: 8px 14px;
+  font-size: 16px;
+}
+
+/* 画面切替 */
 .screen{
   display:none;
-  min-height: 100vh;
+  padding: 18px 16px 28px;
+  max-width: 520px;
+  margin: 0 auto;
 }
-
 .screen.active{ display:block; }
 
-.topbar{
-  height: 52px;
-  display:flex;
-  align-items:center;
-  justify-content: space-between;
-  padding: 10px 14px;
-}
-
-.brand{
-  font-weight: 800;
-  letter-spacing: .5px;
-  font-size: 20px; /* 左上 MKB大きめ */
-}
-
-.admin-btn{
-  border: 1px solid var(--line);
-  background: rgba(255,255,255,.65);
-  color: var(--blue);
-  font-weight: 700;
-  padding: 6px 10px;
-  border-radius: 10px;
-  font-size: 13px; /* 小さめ */
-}
-
-.ghost-btn{
-  border: 1px solid var(--line);
-  background: rgba(255,255,255,.65);
-  color: var(--blue);
-  font-weight: 700;
-  padding: 6px 10px;
-  border-radius: 10px;
-  font-size: 13px;
-}
-
-.center{
-  min-height: calc(100vh - 52px - 80px);
-  display:flex;
-  flex-direction: column;
-  align-items:center;
-  justify-content:center;
-  gap: 14px;
-  padding: 8px 10px 0;
-}
-
+/* タイトル */
 .title{
-  margin: 0;
-  font-size: 34px; /* 勤務確認 文字大きめ */
+  text-align:center;
+  margin: 18px 0 22px;
+  font-size: 44px;
+  color: var(--blue);
+  letter-spacing: .03em;
   font-weight: 900;
 }
 
-.go-btn{
-  width: 132px;   /* だいたい直径4cm相当（端末により見え方は差あり） */
-  height: 132px;
-  border-radius: 999px;  /* きれいな真円 */
-  border: none;
-  color: #fff;
-  font-size: 34px;
-  font-weight: 900;
-  background: linear-gradient(180deg, #1F6BFF, var(--blue));
-  box-shadow: 0 10px 0 var(--blue2), 0 18px 26px rgba(0,0,0,.18);
-  transform: translateY(0);
-  transition: transform .06s ease, box-shadow .06s ease;
-}
-
-.go-btn:active{
-  transform: translateY(6px);
-  box-shadow: 0 4px 0 var(--blue2), 0 10px 18px rgba(0,0,0,.14);
-}
-
-.bus-wrap{
-  width: 100%;
-  display:flex;
-  justify-content:center;
-  margin-top: 8px;
-  padding-bottom: 10px;
-}
-
-.bus-img{
-  width: 170px;
-  max-width: 60vw;
-  height: auto;
+/* GOボタン（真円に近づける） */
+.goBtn{
   display:block;
-}
-
-.footer{
-  height: 80px;
-  display:flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items:center;
-  gap: 6px;
-  padding-bottom: 6px;
-}
-
-.deadline{
+  margin: 0 auto 20px;
+  width: 220px;
+  height: 220px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  font-size: 56px;
   font-weight: 900;
-  font-size: 20px; /* 締切文字を大きめ */
+  color: #fff;
+  letter-spacing: .06em;
+
+  background: radial-gradient(circle at 30% 25%, #7fc0ff 0%, #2e78d6 40%, #1656b9 100%);
+  box-shadow:
+    0 18px 28px rgba(0,0,0,.18),
+    inset 0 10px 18px rgba(255,255,255,.20);
+  text-shadow: 0 3px 0 rgba(0,0,0,.25);
 }
 
-.after-msg{
-  font-size: 12px;
-  opacity: .85;
+/* 締切 */
+.deadlineWrap{
+  text-align:center;
+  margin-top: 6px;
+}
+.deadlineText{
+  font-size: 28px;      /* ここで締切文字サイズ */
+  font-weight: 900;
+  letter-spacing: .02em;
 }
 
-.hidden{ display:none !important; }
-
-/* ===== Panels ===== */
-.panel{
-  width: min(92vw, 520px);
-  margin: 18px auto;
-  background: rgba(255,255,255,.75);
-  border: 1px solid var(--line);
+/* 名前入力カード */
+.card{
+  background: rgba(255,255,255,.55);
+  border: 1px solid rgba(0,0,0,.08);
   border-radius: 16px;
-  padding: 16px 14px;
+  padding: 18px 16px;
+  box-shadow: 0 10px 18px rgba(0,0,0,.06);
+}
+.cardTitle{
+  font-size: 20px;
+  font-weight: 900;
+  margin-bottom: 8px;
+}
+.hint{
+  font-size: 13px;
+  opacity: .8;
+  margin-bottom: 10px;
 }
 
-.panel-title{
-  margin: 0 0 12px;
+.textInput{
+  width:100%;
+  padding: 12px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(0,0,0,.2);
+  font-size: 16px;
+  background: #fff;
+  outline: none;
+}
+.textInput:focus{
+  border-color: rgba(31,102,209,.6);
+  box-shadow: 0 0 0 3px rgba(31,102,209,.15);
+}
+
+/* ボタン類 */
+.primaryBtn{
+  width: 100%;
+  margin-top: 12px;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 12px;
   font-size: 18px;
   font-weight: 900;
+  color: #fff;
+  cursor:pointer;
+  background: linear-gradient(#2f7fe6, #1459c4);
+  box-shadow: 0 10px 16px rgba(0,0,0,.14);
+}
+.primaryBtn.disabled,
+.primaryBtn:disabled{
+  opacity: .55;
+  cursor: not-allowed;
+  box-shadow:none;
 }
 
-.text-input{
+.linkBtn{
+  display:block;
   width: 100%;
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  padding: 12px 12px;
+  margin-top: 14px;
+  background: transparent;
+  border: none;
+  color: var(--blue);
+  font-weight: 900;
   font-size: 16px;
-  outline: none;
+  padding: 8px 0;
+  cursor:pointer;
+  text-decoration: underline;
+}
+
+/* PDF画面 */
+.dateRow{
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  justify-content:center;
+  margin-top: 6px;
+}
+.badgeNew{
+  background: #d63b3b;
+  color:#fff;
+  font-weight: 900;
+  border-radius: 8px;
+  padding: 4px 10px;
+  font-size: 14px;
+}
+.dateText{
+  font-weight: 900;
+  font-size: 18px;
+}
+.pdfTitle{
+  text-align:center;
+  margin: 14px 0 10px;
+  font-size: 26px;
+  font-weight: 900;
+  color: var(--blue);
+}
+.pdfBox{
+  background: rgba(255,255,255,.6);
+  border: 1px solid rgba(0,0,0,.1);
+  border-radius: 14px;
+  padding: 14px;
+  display:flex;
+  align-items:center;
+  gap: 12px;
+}
+.pdfIcon{
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: #e7eefc;
+  color: var(--blue);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight: 900;
+}
+.pdfFile{
+  flex:1;
+  font-weight: 900;
+}
+.openBtn{
+  text-decoration:none;
+  background: var(--blue);
+  color:#fff;
+  font-weight: 900;
+  padding: 10px 14px;
+  border-radius: 12px;
+  display:inline-block;
+}
+.openBtn.disabled{
+  opacity:.5;
+  pointer-events:none;
+}
+
+.checkRow{
+  margin-top: 12px;
+}
+.checkLabel{
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  font-weight: 900;
+}
+.checkLabel input{
+  width: 18px;
+  height: 18px;
+}
+
+.notice{
+  margin-top: 10px;
+  font-size: 12px;
+  font-weight: 900;     /* 黒太字 */
+  color: #000;          /* 濃く */
+  text-align: center;
+}
+
+/* 締切後 */
+.closedDate{
+  text-align:center;
+  margin-top: 6px;
+  font-weight: 900;
+  opacity:.75;
+}
+.closedTitle{
+  text-align:center;
+  margin: 18px 0 8px;
+  font-size: 34px;   /* ←ここで「ネット確認は終了しました」を小さく/大きく */
+  font-weight: 900;
+  color: var(--blue);
+}
+.closedSub{
+  text-align:center;
+  font-weight: 900;
+  font-size: 18px;
+}
+.phoneIcon{
+  text-align:center;
+  font-size: 64px;
+  margin: 16px 0 6px;
+}
+
+/* 管理者モーダル */
+.modal{
+  position: fixed;
+  inset: 0;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  background: rgba(0,0,0,.35);
+  padding: 18px;
+  z-index: 50;
+}
+.modal.show{ display:flex; }
+.modalSheet{
+  width: 100%;
+  max-width: 420px;
+  background: var(--bg);
+  border-radius: 18px;
+  border: 1px solid rgba(0,0,0,.12);
+  padding: 16px;
+  box-shadow: 0 18px 34px rgba(0,0,0,.22);
+}
+.modalTitle{
+  font-weight: 900;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+.modalHint{
+  font-weight: 900;
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+.pinInput{
+  width:100%;
+  padding: 12px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(0,0,0,.22);
+  font-size: 18px;
   background: #fff;
 }
-
-.text-input.small{
-  width: 160px;
-}
-
-.primary-btn{
-  width: 100%;
+.errorText{
   margin-top: 10px;
-  border: none;
-  border-radius: 12px;
-  padding: 12px 12px;
-  font-size: 16px;
+  color: #c62828;
   font-weight: 900;
-  color: #fff;
-  background: var(--blue);
 }
 
-.secondary-btn{
-  border: none;
+/* 管理者画面 */
+.adminTitle{
+  text-align:center;
+  margin: 10px 0 14px;
+  font-size: 24px;
+  font-weight: 900;
+  color: var(--blue);
+}
+.adminCard{
+  background: rgba(255,255,255,.55);
+  border: 1px solid rgba(0,0,0,.08);
+  border-radius: 16px;
+  padding: 14px;
+  margin-bottom: 12px;
+  box-shadow: 0 10px 18px rgba(0,0,0,.06);
+}
+.adminSectionTitle{
+  font-weight: 900;
+  margin-bottom: 8px;
+}
+.row{
+  display:flex;
+  gap: 10px;
+  align-items:center;
+}
+.timeInput{
+  flex:1;
+  padding: 10px 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(0,0,0,.2);
+  background:#fff;
+  font-size: 16px;
+}
+.smallBtn{
+  border:none;
+  background: linear-gradient(#2f7fe6, #1459c4);
+  color:#fff;
+  font-weight: 900;
   border-radius: 12px;
   padding: 10px 12px;
-  font-size: 14px;
-  font-weight: 900;
-  color: #fff;
-  background: var(--blue);
+  cursor:pointer;
+  min-width: 74px;
 }
-
-.danger-btn{
-  width: 100%;
-  border: none;
-  border-radius: 12px;
-  padding: 12px 12px;
-  font-size: 14px;
-  font-weight: 900;
-  color: #fff;
-  background: #C62828;
+.smallBtn.wide{
+  width:100%;
+  margin-top: 10px;
 }
-
-.hint{
-  margin: 10px 2px 0;
+.adminNote{
+  margin-top: 8px;
   font-size: 12px;
   opacity: .75;
 }
 
-/* ===== PDF ===== */
-.pdf-area{
-  padding: 10px 12px 0;
+.adminList{
+  margin-top: 10px;
+  display:flex;
+  flex-direction:column;
+  gap: 8px;
 }
-
-.pdf-frame{
-  width: 100%;
-  height: 52vh;
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  background: #fff;
-}
-
-.check-area{
-  padding: 12px;
-}
-
-.check-row{
+.listRow{
   display:flex;
   align-items:center;
-  justify-content: space-between;
+  justify-content:space-between;
   gap: 10px;
-  background: rgba(255,255,255,.75);
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  padding: 12px;
-}
-
-.check-left{
-  display:flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.check-title{
-  font-weight: 900;
-  font-size: 14px;
-}
-
-.check-status{
-  font-size: 12px;
-  opacity: .8;
-}
-
-.check-btn{
-  border: none;
+  padding: 10px 10px;
+  background: rgba(255,255,255,.6);
+  border: 1px solid rgba(0,0,0,.08);
   border-radius: 12px;
-  padding: 12px 12px;
-  font-size: 15px;
+}
+.listName{
   font-weight: 900;
-  color:#fff;
-  background: var(--blue);
-  min-width: 140px;
 }
-
-.check-btn[disabled]{
-  background: #9aa6c2;
-}
-
-.confirmed-box{
-  margin-top: 10px;
-  background: rgba(255,255,255,.75);
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  padding: 12px;
-}
-
-.confirmed-title{
+.delBtn{
+  border: 2px solid #c62828;
+  background:#fff;
+  color:#c62828;
   font-weight: 900;
+  border-radius: 10px;
+  padding: 6px 10px;
+  cursor:pointer;
+}
+.empty{
   font-size: 13px;
-  margin-bottom: 6px;
+  opacity: .75;
 }
 
-.confirmed-list{
-  font-size: 13px;
-  line-height: 1.4;
-}
-
-.note{
-  margin-top: 10px;
-  font-size: 11px;      /* 小さく */
-  opacity: .65;
-  text-align: center;
-}
-
-/* ===== Admin form rows ===== */
-.form-row{
-  display:flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-top: 12px;
-}
-
-.label{
-  font-size: 12px;
-  font-weight: 900;
-  opacity: .8;
+/* スマホ微調整 */
+@media (max-width: 360px){
+  .title{ font-size: 38px; }
+  .goBtn{ width: 200px; height: 200px; font-size: 52px; }
+  .deadlineText{ font-size: 26px; }
 }
