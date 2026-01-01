@@ -282,11 +282,12 @@ body{
 
 /* スマホ最適化 */
 @media (max-width: 360px){
-  .title{ font-size: 40px; }
-  .subTitle{ font-size: 28px; }
+  .title{ font-size: 60px; }
+  .subTitle{ font-size: 35px; }
   .goBtn{ width: 160px; height: 160px; font-size: 45px; }
   .confirmRow{ flex-direction: column; align-items: stretch; }
   .checkWrap{ justify-content: center; }
 }
+
 
 
