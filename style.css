@@ -95,7 +95,7 @@ body{
 
 /* ヒント */
 .hint{
-  margin: 16px auto 0;
+  margin: 23px auto 0;
   text-align:center;
   color:#333;
 }
@@ -301,6 +301,7 @@ body{
   max-width: 40vw;   /* スマホ対応 */
   opacity: 0.95;
 }
+
 
 
 
