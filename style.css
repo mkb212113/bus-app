@@ -187,7 +187,7 @@ body{
   color:#d00;
   font-weight: 1000;
   border-radius: 999px;
-  padding: 4px 10px;
+  padding: 10px 15px;
 }
 
 .pdfCard{
@@ -301,6 +301,7 @@ body{
   max-width: 40vw;   /* スマホ対応 */
   opacity: 0.95;
 }
+
 
 
 
