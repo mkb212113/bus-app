@@ -85,7 +85,7 @@ body{
 }
 .deadlineText{
   font-size: 20px;      /* ここで締切文字サイズ */
-  font-weight: 900;
+  font-weight: 800;
   letter-spacing: .02em;
 }
 
@@ -406,4 +406,5 @@ body{
   .goBtn{ width: 200px; height: 200px; font-size: 52px; }
   .deadlineText{ font-size: 26px; }
 }
+
 
