@@ -1,312 +1,298 @@
 :root{
-  --cream:#fbf2e6;
-  --blue:#2a73d6;
-  --blue2:#1f5fb6;
-  --text:#1e1e1e;
+  --bg: #FFF3D8;          /* クリーム背景 */
+  --blue: #0B3D91;        /* 全体青 */
+  --blue2:#0A337A;
+  --text:#0B3D91;
+  --card:#ffffff;
+  --line: rgba(11,61,145,.18);
 }
 
-*{box-sizing:border-box}
-html,body{height:100%}
+*{ box-sizing: border-box; }
+
 body{
   margin:0;
   font-family: system-ui, -apple-system, "Segoe UI", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
-  background: var(--cream);
+  background: var(--bg);
   color: var(--text);
 }
 
-/* ====== ヘッダー ====== */
+.screen{
+  display:none;
+  min-height: 100vh;
+}
+
+.screen.active{ display:block; }
+
 .topbar{
-  position: sticky;
-  top: 0;
-  z-index: 10;
+  height: 52px;
   display:flex;
   align-items:center;
-  justify-content:space-between;
+  justify-content: space-between;
   padding: 10px 14px;
-  background: rgba(251,242,230,.92);
-  backdrop-filter: blur(6px);
 }
 
 .brand{
-  font-weight: 900;
-  letter-spacing: .02em;
-  font-size: 25px; /* ←左上MKBを大きくしたい場合ここ */
-}
-
-.adminBtn{
-  border: 2px solid var(--blue);
-  background:#fff;
-  color: var(--blue);
   font-weight: 800;
-  border-radius: 12px;
-  padding: 8px 12px;
-  font-size: 16px;
+  letter-spacing: .5px;
+  font-size: 20px; /* 左上 MKB大きめ */
 }
 
-/* ====== 画面切替 ====== */
-.screen{
-  display:none;
-  padding: 18px 16px 28px;
-  max-width: 520px;
-  margin: 0 auto;
-}
-.screen.active{display:block}
-
-/* ====== タイトル ====== */
-.title{
-  margin: 26px 0 18px;
-  text-align:center;
+.admin-btn{
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.65);
   color: var(--blue);
-  font-weight: 900;
-  font-size: 44px;
-  letter-spacing: .03em;
+  font-weight: 700;
+  padding: 6px 10px;
+  border-radius: 10px;
+  font-size: 13px; /* 小さめ */
 }
 
-.subTitle{
-  margin: 22px 0 14px;
-  text-align:center;
+.ghost-btn{
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.65);
   color: var(--blue);
-  font-weight: 900;
-  font-size: 22px;
+  font-weight: 700;
+  padding: 6px 10px;
+  border-radius: 10px;
+  font-size: 13px;
 }
 
-/* ====== GOボタン（真円・立体） ====== */
-.goBtn{
-  display:block;
-  width: 220px;
-  height: 220px;
-  margin: 10px auto 8px;
-  border-radius: 999px; /* 真円 */
-  border: none;
-  cursor:pointer;
-  background:
-    radial-gradient(circle at 35% 30%, #7ec1ff 0%, #3f8fe8 35%, #1d64c5 70%, #1554ad 100%);
-  box-shadow:
-    0 18px 26px rgba(0,0,0,.18),
-    inset 0 12px 18px rgba(255,255,255,.28),
-    inset 0 -12px 16px rgba(0,0,0,.20);
-}
-.goBtn:active{
-  transform: translateY(1px);
-  box-shadow:
-    0 14px 22px rgba(0,0,0,.18),
-    inset 0 10px 14px rgba(255,255,255,.25),
-    inset 0 -10px 14px rgba(0,0,0,.18);
-}
-.goBtn span{
-  display:block;
-  color:#fff;
-  font-weight: 900;
-  font-size: 58px;
-  letter-spacing: .06em;
-  text-shadow: 0 6px 10px rgba(0,0,0,.25);
-}
-
-/* ====== バス（GOの下、画面下寄り） ====== */
-.busWrap{
+.center{
+  min-height: calc(100vh - 52px - 80px);
   display:flex;
-  justify-content:flex-start;
-  margin: 8px 0 0;
-}
-.busImg{
-  width: 140px;
-  max-width: 45vw;
-  opacity: .98;
+  flex-direction: column;
+  align-items:center;
+  justify-content:center;
+  gap: 14px;
+  padding: 8px 10px 0;
 }
 
-/* ====== 締切 ====== */
-.deadline{
-  margin-top: 18px;
-  text-align:center;
+.title{
+  margin: 0;
+  font-size: 34px; /* 勤務確認 文字大きめ */
   font-weight: 900;
-  font-size: 30px; /* ←締切の文字を大きくしたい場合ここ */
 }
 
-/* ====== カード ====== */
-.card, .pdfCard{
-  background: rgba(255,255,255,.70);
-  border: 1px solid rgba(0,0,0,.06);
-  border-radius: 18px;
-  padding: 16px;
-  box-shadow: 0 10px 18px rgba(0,0,0,.06);
+.go-btn{
+  width: 132px;   /* だいたい直径4cm相当（端末により見え方は差あり） */
+  height: 132px;
+  border-radius: 999px;  /* きれいな真円 */
+  border: none;
+  color: #fff;
+  font-size: 34px;
+  font-weight: 900;
+  background: linear-gradient(180deg, #1F6BFF, var(--blue));
+  box-shadow: 0 10px 0 var(--blue2), 0 18px 26px rgba(0,0,0,.18);
+  transform: translateY(0);
+  transition: transform .06s ease, box-shadow .06s ease;
+}
+
+.go-btn:active{
+  transform: translateY(6px);
+  box-shadow: 0 4px 0 var(--blue2), 0 10px 18px rgba(0,0,0,.14);
+}
+
+.bus-wrap{
+  width: 100%;
+  display:flex;
+  justify-content:center;
+  margin-top: 8px;
+  padding-bottom: 10px;
+}
+
+.bus-img{
+  width: 170px;
+  max-width: 60vw;
+  height: auto;
+  display:block;
+}
+
+.footer{
+  height: 80px;
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items:center;
+  gap: 6px;
+  padding-bottom: 6px;
+}
+
+.deadline{
+  font-weight: 900;
+  font-size: 20px; /* 締切文字を大きめ */
+}
+
+.after-msg{
+  font-size: 12px;
+  opacity: .85;
+}
+
+.hidden{ display:none !important; }
+
+/* ===== Panels ===== */
+.panel{
+  width: min(92vw, 520px);
+  margin: 18px auto;
+  background: rgba(255,255,255,.75);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 16px 14px;
+}
+
+.panel-title{
+  margin: 0 0 12px;
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.text-input{
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px 12px;
+  font-size: 16px;
+  outline: none;
+  background: #fff;
+}
+
+.text-input.small{
+  width: 160px;
+}
+
+.primary-btn{
+  width: 100%;
+  margin-top: 10px;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 12px;
+  font-size: 16px;
+  font-weight: 900;
+  color: #fff;
+  background: var(--blue);
+}
+
+.secondary-btn{
+  border: none;
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-size: 14px;
+  font-weight: 900;
+  color: #fff;
+  background: var(--blue);
+}
+
+.danger-btn{
+  width: 100%;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 12px;
+  font-size: 14px;
+  font-weight: 900;
+  color: #fff;
+  background: #C62828;
+}
+
+.hint{
+  margin: 10px 2px 0;
+  font-size: 12px;
+  opacity: .75;
+}
+
+/* ===== PDF ===== */
+.pdf-area{
+  padding: 10px 12px 0;
+}
+
+.pdf-frame{
+  width: 100%;
+  height: 52vh;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #fff;
+}
+
+.check-area{
+  padding: 12px;
+}
+
+.check-row{
+  display:flex;
+  align-items:center;
+  justify-content: space-between;
+  gap: 10px;
+  background: rgba(255,255,255,.75);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 12px;
+}
+
+.check-left{
+  display:flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.check-title{
+  font-weight: 900;
+  font-size: 14px;
+}
+
+.check-status{
+  font-size: 12px;
+  opacity: .8;
+}
+
+.check-btn{
+  border: none;
+  border-radius: 12px;
+  padding: 12px 12px;
+  font-size: 15px;
+  font-weight: 900;
+  color:#fff;
+  background: var(--blue);
+  min-width: 140px;
+}
+
+.check-btn[disabled]{
+  background: #9aa6c2;
+}
+
+.confirmed-box{
+  margin-top: 10px;
+  background: rgba(255,255,255,.75);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 12px;
+}
+
+.confirmed-title{
+  font-weight: 900;
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+
+.confirmed-list{
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.note{
+  margin-top: 10px;
+  font-size: 11px;      /* 小さく */
+  opacity: .65;
+  text-align: center;
+}
+
+/* ===== Admin form rows ===== */
+.form-row{
+  display:flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
 }
 
 .label{
-  display:block;
-  font-size: 14px;
-  color:#444;
-  margin: 6px 0 6px;
-}
-
-.textInput{
-  width:100%;
-  font-size: 18px;
-  padding: 12px 12px;
-  border-radius: 12px;
-  border: 1px solid rgba(0,0,0,.15);
-  outline: none;
-  background:#fff;
-}
-
-.primaryBtn{
-  width:100%;
-  margin-top: 12px;
-  border:none;
-  border-radius: 14px;
-  padding: 12px 14px;
-  font-size: 20px;
+  font-size: 12px;
   font-weight: 900;
-  color:#fff;
-  background: linear-gradient(#2f7ce2, #1c5fb9);
-  box-shadow: 0 10px 16px rgba(0,0,0,.12);
+  opacity: .8;
 }
-.primaryBtn:disabled{
-  opacity:.55;
-  box-shadow:none;
-}
-
-.linkBtn{
-  margin: 16px auto 0;
-  display:block;
-  border:none;
-  background: transparent;
-  color: var(--blue);
-  font-size: 18px;
-  font-weight: 900;
-  cursor:pointer;
-}
-
-.dateLine{
-  text-align:center;
-  margin: 6px 0 10px;
-  font-weight: 800;
-  color:#333;
-}
-
-.pdfTitle{
-  text-align:center;
-  font-weight: 900;
-  color: var(--blue);
-  margin-bottom: 10px;
-  font-size: 20px;
-}
-
-.openPdfBtn{
-  display:block;
-  text-align:center;
-  text-decoration:none;
-  background: var(--blue);
-  color:#fff;
-  font-weight: 900;
-  padding: 12px 14px;
-  border-radius: 14px;
-  margin: 6px 0 12px;
-}
-
-.checkRow{
-  display:flex;
-  justify-content:center;
-  margin: 10px 0 8px;
-}
-.checkLabel{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  font-weight: 800;
-}
-.checkLabel input{ width:22px; height:22px; }
-
-.miniNote{
-  margin-top: 10px;
-  font-size: 14px;
-  color:#333;
-  text-align:center;
-}
-
-/* ====== 締切後 ====== */
-.closedTitle{
-  margin: 12px 0 8px;
-  text-align:center;
-  color: var(--blue);
-  font-weight: 900;
-  font-size: 27px;  /* ←「ネット確認は終了しました」を小さくしたいならここ */
-}
-.closedText{
-  text-align:center;
-  font-weight: 900;
-  font-size: 18px;
-}
-.phoneIcon{
-  text-align:center;
-  font-size: 72px;
-  margin-top: 10px;
-}
-
-/* ====== モーダル（管理者PIN） ====== */
-.modal{
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.35);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  padding: 16px;
-  z-index: 50;
-}
-.modal.open{display:flex}
-
-.modalCard{
-  width: min(520px, 100%);
-  background: var(--cream);
-  border-radius: 18px;
-  padding: 16px;
-  border: 1px solid rgba(0,0,0,.08);
-  box-shadow: 0 20px 30px rgba(0,0,0,.18);
-}
-.modalTitle{
-  text-align:center;
-  color: var(--blue);
-  font-weight: 900;
-  font-size: 22px;
-  margin-bottom: 10px;
-}
-.modalBtns{
-  display:flex;
-  gap:10px;
-  margin-top: 12px;
-}
-.ghostBtn{
-  flex:1;
-  border:2px solid rgba(0,0,0,.18);
-  background:#fff;
-  border-radius: 14px;
-  padding: 12px 14px;
-  font-weight: 900;
-  font-size: 16px;
-}
-.modalBtns .primaryBtn{
-  flex:1;
-  margin-top: 0;
-}
-.errorText{
-  margin-top: 10px;
-  color:#c62828;
-  font-weight: 900;
-  text-align:center;
-}
-
-/* 管理者一覧 */
-.hr{ border:none; border-top:1px solid rgba(0,0,0,.10); margin:14px 0; }
-.sectionTitle{ font-weight:900; color: var(--blue2); margin-bottom:8px; }
-.adminList{ font-weight:800; }
-.dayRow{ padding:6px 0; border-bottom:1px dashed rgba(0,0,0,.10); }
-
-/* スマホ最適化 */
-@media (max-width: 360px){
-  .title{font-size: 38px;}
-  .goBtn{width: 190px; height:190px;}
-  .goBtn span{font-size: 52px;}
-  .deadline{font-size: 20px;}
-  .brand{font-size: 16px;}
-}
-
