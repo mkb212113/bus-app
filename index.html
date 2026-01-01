@@ -2,303 +2,476 @@
 <html lang="ja">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>勤務確認</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#1f66d1" />
+  <title>MKB 春日井｜勤務確認</title>
+
+  <link rel="manifest" href="manifest.json" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- ===== Home ===== -->
-  <main id="home" class="screen active">
-    <header class="topbar">
-      <div class="brand">MKB 春日井</div>
-      <button id="adminBtn" class="admin-btn" type="button">管理者</button>
-    </header>
+  <!-- 上部バー（下の重複は作りません） -->
+  <header class="topbar">
+    <div class="brand">MKB 春日井</div>
+    <button class="adminBtn" id="openAdminBtn" type="button">管理者</button>
+  </header>
 
-    <section class="center">
-      <h1 class="title">勤務確認</h1>
+  <!-- 画面1：ホーム -->
+  <main class="screen active" id="screenHome" aria-label="ホーム">
+    <h1 class="title">勤務確認</h1>
 
-      <button id="goBtn" class="go-btn" type="button" aria-label="勤務確認 GO">
-        GO
-      </button>
+    <button class="goBtn" id="goBtn" type="button" aria-label="GO">GO</button>
 
-      <!-- バス画像：GitHubに置いた画像パスに合わせてください -->
-      <div class="bus-wrap">
-        <img class="bus-img" src="png/bus.png" alt="バスイラスト" />
+    <div class="deadlineWrap" aria-label="締切">
+      <div class="deadlineText" id="deadlineText">締切：17:00</div>
+    </div>
+  </main>
+
+  <!-- 画面2：名前入力 -->
+  <main class="screen" id="screenName" aria-label="名前入力">
+    <div class="card">
+      <div class="cardTitle">名前を入力してください</div>
+      <div class="hint">例：佐藤 太郎</div>
+
+      <input class="textInput" id="nameInput" type="text" inputmode="text" autocomplete="name" placeholder="お名前" />
+
+      <button class="primaryBtn" id="nameConfirmBtn" type="button">確認</button>
+
+      <button class="linkBtn" id="backToHomeFromName" type="button">戻る</button>
+    </div>
+  </main>
+
+  <!-- 画面3：点呼簿（PDF確認） -->
+  <main class="screen" id="screenPdf" aria-label="点呼簿">
+    <div class="dateRow">
+      <span class="badgeNew" id="badgeNew">最新</span>
+      <span class="dateText" id="todayText">2026年1月1日</span>
+    </div>
+
+    <div class="pdfTitle">点呼簿</div>
+
+    <!-- PDF表示枠（リンクで開く方式：iPhone/Android両対応） -->
+    <div class="pdfBox">
+      <div class="pdfIcon">PDF</div>
+      <div class="pdfFile" id="pdfFileName">点呼簿PDF</div>
+      <a class="openBtn" id="openPdfLink" href="#" target="_blank" rel="noopener">開く</a>
+    </div>
+
+    <div class="checkRow">
+      <label class="checkLabel">
+        <input type="checkbox" id="agreeCheck" />
+        <span>確認しました（締切まで）</span>
+      </label>
+    </div>
+
+    <button class="primaryBtn" id="doneBtn" type="button">確認しました</button>
+
+    <!-- 注意書き：黒・太字・小さめ（場所は下） -->
+    <div class="notice">
+      ※団体名・個人情報を含むため転用禁止
+    </div>
+
+    <button class="linkBtn" id="backToHomeFromPdf" type="button">戻る</button>
+  </main>
+
+  <!-- 画面4：締切後 -->
+  <main class="screen" id="screenClosed" aria-label="締切後">
+    <div class="closedDate" id="closedDate">2026-01-01</div>
+    <div class="closedTitle">ネット確認は終了しました。</div>
+    <div class="closedSub">電話にて確認してください。</div>
+    <div class="phoneIcon">📞</div>
+    <button class="linkBtn" id="backToHomeFromClosed" type="button">戻る</button>
+  </main>
+
+  <!-- 管理者：PIN -->
+  <div class="modal" id="adminModal" aria-hidden="true">
+    <div class="modalSheet">
+      <div class="modalTitle">管理者</div>
+
+      <div class="modalHint">暗証番号（4桁）</div>
+      <input class="pinInput" id="pinInput" type="password" inputmode="numeric" maxlength="4" placeholder="****" />
+
+      <button class="primaryBtn" id="pinEnterBtn" type="button">開く</button>
+      <button class="linkBtn" id="closeAdminModal" type="button">閉じる</button>
+
+      <div class="errorText" id="pinError" style="display:none;">暗証番号が違います。</div>
+    </div>
+  </div>
+
+  <!-- 管理者画面 -->
+  <main class="screen" id="screenAdmin" aria-label="管理者画面">
+    <h2 class="adminTitle">管理者画面</h2>
+
+    <div class="adminCard">
+      <div class="adminSectionTitle">締切時間</div>
+      <div class="row">
+        <input class="timeInput" id="deadlineInput" type="time" />
+        <button class="smallBtn" id="saveDeadlineBtn" type="button">保存</button>
       </div>
-    </section>
+      <div class="adminNote">※保存すると、初期画面の締切表示と締切判定に反映されます。</div>
+    </div>
 
-    <footer class="footer">
-      <div id="deadlineText" class="deadline">締切：17:00</div>
-      <div id="afterMsg" class="after-msg hidden">締切後は電話連絡してください</div>
-    </footer>
+    <div class="adminCard">
+      <div class="adminSectionTitle">点呼簿PDFリンク</div>
+      <input class="textInput" id="pdfUrlInput" type="url" placeholder="PDFのURLを貼り付け" />
+      <button class="smallBtn wide" id="savePdfBtn" type="button">保存</button>
+      <div class="adminNote">※Googleドライブの共有リンク等を貼り付けてください。</div>
+    </div>
+
+    <div class="adminCard">
+      <div class="adminSectionTitle">登録者（名前）</div>
+      <div class="row">
+        <input class="textInput" id="addUserInput" type="text" placeholder="追加する名前" />
+        <button class="smallBtn" id="addUserBtn" type="button">追加</button>
+      </div>
+
+      <div class="adminList" id="userList"></div>
+      <div class="adminNote">※退職者はここで削除すれば、URLを開いても確認できません。</div>
+    </div>
+
+    <div class="adminCard">
+      <div class="adminSectionTitle">本日の確認者</div>
+      <div class="adminList" id="confirmedList"></div>
+      <div class="adminNote">※日付ごとに保存されます（ブラウザ保存）。</div>
+    </div>
+
+    <button class="linkBtn" id="exitAdminBtn" type="button">ホームへ戻る</button>
   </main>
 
-  <!-- ===== Name ===== -->
-  <main id="name" class="screen">
-    <header class="topbar">
-      <div class="brand">MKB 春日井</div>
-      <button id="backFromName" class="ghost-btn" type="button">戻る</button>
-    </header>
+  <script>
+    // ====== 設定 ======
+    const ADMIN_PIN = "0900";
+    const LS_KEYS = {
+      deadline: "mkb_deadline",     // "HH:MM"
+      pdfUrl: "mkb_pdf_url",        // string
+      users: "mkb_users",           // JSON array
+      confirmed: "mkb_confirmed"    // JSON { "YYYY-MM-DD": [names...] }
+    };
 
-    <section class="panel">
-      <h2 class="panel-title">お名前を入力してください</h2>
-      <input id="nameInput" class="text-input" type="text" inputmode="text" autocomplete="name" placeholder="例：青山" />
-      <button id="saveNameBtn" class="primary-btn" type="button">保存</button>
-      <p class="hint">※一度保存するとこの端末に記憶されます</p>
-    </section>
-  </main>
+    // ====== 要素 ======
+    const screens = {
+      home: document.getElementById("screenHome"),
+      name: document.getElementById("screenName"),
+      pdf: document.getElementById("screenPdf"),
+      closed: document.getElementById("screenClosed"),
+      admin: document.getElementById("screenAdmin"),
+    };
 
-  <!-- ===== PDF ===== -->
-  <main id="pdf" class="screen">
-    <header class="topbar">
-      <div class="brand">MKB 春日井</div>
-      <button id="backFromPdf" class="ghost-btn" type="button">戻る</button>
-    </header>
+    const deadlineText = document.getElementById("deadlineText");
 
-    <section class="pdf-area">
-      <!-- 表示したいPDF：/pdf/tenko.pdf をGitHubに置いてください -->
-      <iframe id="pdfFrame" class="pdf-frame" src="pdf/tenko.pdf" title="点呼簿PDF"></iframe>
-    </section>
+    const goBtn = document.getElementById("goBtn");
+    const nameInput = document.getElementById("nameInput");
+    const nameConfirmBtn = document.getElementById("nameConfirmBtn");
 
-    <section class="check-area">
-      <div class="check-row">
-        <div class="check-left">
-          <div class="check-title">確認</div>
-          <div id="checkStatus" class="check-status">未確認</div>
+    const openPdfLink = document.getElementById("openPdfLink");
+    const pdfFileName = document.getElementById("pdfFileName");
+    const todayText = document.getElementById("todayText");
+    const badgeNew = document.getElementById("badgeNew");
+
+    const agreeCheck = document.getElementById("agreeCheck");
+    const doneBtn = document.getElementById("doneBtn");
+
+    const closedDate = document.getElementById("closedDate");
+
+    // 管理者モーダル
+    const adminModal = document.getElementById("adminModal");
+    const openAdminBtn = document.getElementById("openAdminBtn");
+    const closeAdminModal = document.getElementById("closeAdminModal");
+    const pinInput = document.getElementById("pinInput");
+    const pinEnterBtn = document.getElementById("pinEnterBtn");
+    const pinError = document.getElementById("pinError");
+
+    // 管理者画面
+    const deadlineInput = document.getElementById("deadlineInput");
+    const saveDeadlineBtn = document.getElementById("saveDeadlineBtn");
+
+    const pdfUrlInput = document.getElementById("pdfUrlInput");
+    const savePdfBtn = document.getElementById("savePdfBtn");
+
+    const addUserInput = document.getElementById("addUserInput");
+    const addUserBtn = document.getElementById("addUserBtn");
+    const userList = document.getElementById("userList");
+    const confirmedList = document.getElementById("confirmedList");
+
+    const exitAdminBtn = document.getElementById("exitAdminBtn");
+
+    // 戻る
+    document.getElementById("backToHomeFromName").onclick = () => showScreen("home");
+    document.getElementById("backToHomeFromPdf").onclick = () => showScreen("home");
+    document.getElementById("backToHomeFromClosed").onclick = () => showScreen("home");
+
+    // ====== ユーティリティ ======
+    function pad(n){ return String(n).padStart(2,"0"); }
+    function todayISO(){
+      const d = new Date();
+      return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+    }
+    function todayJP(){
+      const d = new Date();
+      return `${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日`;
+    }
+    function nowHHMM(){
+      const d = new Date();
+      return `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+    }
+    function getDeadline(){
+      return localStorage.getItem(LS_KEYS.deadline) || "17:00";
+    }
+    function setDeadline(v){
+      localStorage.setItem(LS_KEYS.deadline, v);
+    }
+    function isAfterDeadline(){
+      // HH:MM 文字列比較でOK（ゼロ埋め前提）
+      return nowHHMM() > getDeadline();
+    }
+    function getUsers(){
+      try {
+        return JSON.parse(localStorage.getItem(LS_KEYS.users) || "[]");
+      } catch {
+        return [];
+      }
+    }
+    function setUsers(arr){
+      localStorage.setItem(LS_KEYS.users, JSON.stringify(arr));
+    }
+    function getConfirmedAll(){
+      try {
+        return JSON.parse(localStorage.getItem(LS_KEYS.confirmed) || "{}");
+      } catch {
+        return {};
+      }
+    }
+    function setConfirmedAll(obj){
+      localStorage.setItem(LS_KEYS.confirmed, JSON.stringify(obj));
+    }
+    function addConfirmed(name){
+      const iso = todayISO();
+      const all = getConfirmedAll();
+      all[iso] = all[iso] || [];
+      if (!all[iso].includes(name)) all[iso].push(name);
+      setConfirmedAll(all);
+    }
+    function getPdfUrl(){
+      return localStorage.getItem(LS_KEYS.pdfUrl) || "#";
+    }
+    function setPdfUrl(url){
+      localStorage.setItem(LS_KEYS.pdfUrl, url);
+    }
+
+    function showScreen(key){
+      Object.values(screens).forEach(el => el.classList.remove("active"));
+      screens[key].classList.add("active");
+      window.scrollTo({top:0, behavior:"instant"});
+    }
+
+    // ====== 初期表示反映 ======
+    function refreshHome(){
+      deadlineText.textContent = `締切：${getDeadline()}`;
+    }
+
+    function refreshPdf(){
+      todayText.textContent = todayJP();
+      badgeNew.style.display = "inline-block";
+
+      const url = getPdfUrl();
+      openPdfLink.href = url === "#" ? "#" : url;
+      openPdfLink.classList.toggle("disabled", url === "#");
+      pdfFileName.textContent = url === "#" ? "PDF未設定（管理者で設定してください）" : "点呼簿PDF";
+
+      agreeCheck.checked = false;
+      doneBtn.disabled = true;
+      doneBtn.classList.add("disabled");
+    }
+
+    // ====== GO押下 ======
+    goBtn.addEventListener("click", () => {
+      refreshHome();
+      if (isAfterDeadline()){
+        closedDate.textContent = todayISO();
+        showScreen("closed");
+        return;
+      }
+      showScreen("name");
+      setTimeout(()=>nameInput.focus(), 50);
+    });
+
+    // 名前確認
+    nameConfirmBtn.addEventListener("click", () => {
+      const name = (nameInput.value || "").trim();
+      if (!name){
+        alert("名前を入力してください。");
+        return;
+      }
+
+      // 登録者制御（退職者対策）
+      const users = getUsers();
+      if (users.length > 0 && !users.includes(name)){
+        alert("登録されていません。管理者に連絡してください。");
+        return;
+      }
+
+      // 締切チェック
+      if (isAfterDeadline()){
+        closedDate.textContent = todayISO();
+        showScreen("closed");
+        return;
+      }
+
+      // 一時保存
+      sessionStorage.setItem("mkb_current_name", name);
+
+      refreshPdf();
+      showScreen("pdf");
+    });
+
+    // PDF画面のチェック
+    agreeCheck.addEventListener("change", () => {
+      const ok = agreeCheck.checked && !isAfterDeadline();
+      doneBtn.disabled = !ok;
+      doneBtn.classList.toggle("disabled", !ok);
+    });
+
+    // 確認しました
+    doneBtn.addEventListener("click", () => {
+      if (isAfterDeadline()){
+        closedDate.textContent = todayISO();
+        showScreen("closed");
+        return;
+      }
+      const name = sessionStorage.getItem("mkb_current_name") || "";
+      if (!name){
+        showScreen("home");
+        return;
+      }
+      addConfirmed(name);
+      alert("確認を記録しました。");
+      showScreen("home");
+      nameInput.value = "";
+      sessionStorage.removeItem("mkb_current_name");
+    });
+
+    // ====== 管理者モーダル ======
+    openAdminBtn.addEventListener("click", () => {
+      pinInput.value = "";
+      pinError.style.display = "none";
+      adminModal.classList.add("show");
+      adminModal.setAttribute("aria-hidden","false");
+      setTimeout(()=>pinInput.focus(), 50);
+    });
+
+    closeAdminModal.addEventListener("click", () => {
+      adminModal.classList.remove("show");
+      adminModal.setAttribute("aria-hidden","true");
+    });
+
+    pinEnterBtn.addEventListener("click", () => {
+      const pin = (pinInput.value || "").trim();
+      if (pin === ADMIN_PIN){
+        adminModal.classList.remove("show");
+        adminModal.setAttribute("aria-hidden","true");
+        openAdmin();
+      } else {
+        pinError.style.display = "block";
+      }
+    });
+
+    // ====== 管理者画面 ======
+    function openAdmin(){
+      // 入力反映
+      deadlineInput.value = getDeadline();
+      pdfUrlInput.value = (getPdfUrl() === "#") ? "" : getPdfUrl();
+
+      renderUsers();
+      renderConfirmed();
+
+      showScreen("admin");
+    }
+
+    function renderUsers(){
+      const users = getUsers();
+      if (users.length === 0){
+        userList.innerHTML = `<div class="empty">（登録者なし）</div>`;
+        return;
+      }
+      userList.innerHTML = users.map(u => `
+        <div class="listRow">
+          <div class="listName">${escapeHtml(u)}</div>
+          <button class="delBtn" data-name="${encodeURIComponent(u)}" type="button">削除</button>
         </div>
+      `).join("");
 
-        <button id="checkBtn" class="check-btn" type="button">確認しました</button>
-      </div>
-
-      <div class="confirmed-box">
-        <div class="confirmed-title">確認した人</div>
-        <div id="confirmedList" class="confirmed-list">（まだありません）</div>
-      </div>
-
-      <!-- 注意書き（小さく・下の方） -->
-      <div class="note">
-        ※団体名・個人情報を含むため、転用・転載は禁止。
-      </div>
-    </section>
-  </main>
-
-  <!-- ===== Admin ===== -->
-  <main id="admin" class="screen">
-    <header class="topbar">
-      <div class="brand">MKB 春日井</div>
-      <button id="backFromAdmin" class="ghost-btn" type="button">戻る</button>
-    </header>
-
-    <!-- PIN -->
-    <section id="pinPanel" class="panel">
-      <h2 class="panel-title">管理者暗証番号</h2>
-      <input id="pinInput" class="text-input" type="password" inputmode="numeric" maxlength="4" placeholder="4桁" />
-      <button id="pinOkBtn" class="primary-btn" type="button">開く</button>
-      <p class="hint">※4桁（設定：0900）</p>
-    </section>
-
-    <!-- Admin content -->
-    <section id="adminPanel" class="panel hidden">
-      <h2 class="panel-title">管理者メニュー</h2>
-
-      <div class="form-row">
-        <label class="label">締切時刻</label>
-        <input id="deadlineInput" class="text-input small" type="time" />
-        <button id="saveDeadlineBtn" class="secondary-btn" type="button">保存</button>
-      </div>
-
-      <div class="form-row">
-        <label class="label">点呼簿PDFのパス</label>
-        <input id="pdfPathInput" class="text-input" type="text" placeholder="例：pdf/tenko.pdf" />
-        <button id="savePdfBtn" class="secondary-btn" type="button">保存</button>
-        <p class="hint">※GitHubに置いたPDFの相対パスを入れます</p>
-      </div>
-
-      <div class="form-row">
-        <label class="label">本日の確認記録</label>
-        <button id="clearTodayBtn" class="danger-btn" type="button">今日の確認をリセット</button>
-      </div>
-    </section>
-  </main>
-
-<script>
-(() => {
-  // ===== Settings =====
-  const ADMIN_PIN = "0900";
-  const LS_NAME = "mkb_name";
-  const LS_DEADLINE = "mkb_deadline";    // "17:00" etc
-  const LS_PDFPATH = "mkb_pdfpath";      // "pdf/tenko.pdf"
-  const todayKey = () => {
-    const d = new Date();
-    const y = d.getFullYear();
-    const m = String(d.getMonth()+1).padStart(2,"0");
-    const day = String(d.getDate()).padStart(2,"0");
-    return `mkb_confirm_${y}-${m}-${day}`;
-  };
-
-  const $ = (id) => document.getElementById(id);
-
-  const screens = ["home","name","pdf","admin"];
-  const show = (which) => {
-    for (const s of screens) $(s).classList.toggle("active", s === which);
-    window.scrollTo(0,0);
-  };
-
-  // ===== Init default =====
-  const getDeadline = () => localStorage.getItem(LS_DEADLINE) || "17:00";
-  const setDeadline = (v) => localStorage.setItem(LS_DEADLINE, v);
-
-  const getPdfPath = () => localStorage.getItem(LS_PDFPATH) || "pdf/tenko.pdf";
-  const setPdfPath = (v) => localStorage.setItem(LS_PDFPATH, v);
-
-  function refreshDeadlineUI() {
-    const dl = getDeadline();
-    $("deadlineText").textContent = `締切：${dl}`;
-
-    // after deadline message
-    const now = new Date();
-    const [hh, mm] = dl.split(":").map(Number);
-    const cutoff = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hh, mm, 0, 0);
-    const after = now.getTime() > cutoff.getTime();
-    $("afterMsg").classList.toggle("hidden", !after);
-    // 〆切後はチェック不可
-    $("checkBtn")?.toggleAttribute("disabled", after);
-  }
-
-  function refreshPdfUI() {
-    $("pdfFrame").src = getPdfPath();
-  }
-
-  // ===== Name =====
-  function getName() {
-    return (localStorage.getItem(LS_NAME) || "").trim();
-  }
-  function setName(v) {
-    localStorage.setItem(LS_NAME, v.trim());
-  }
-
-  // ===== Confirm list =====
-  function getConfirmers() {
-    try {
-      return JSON.parse(localStorage.getItem(todayKey()) || "[]");
-    } catch {
-      return [];
+      userList.querySelectorAll(".delBtn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const name = decodeURIComponent(btn.dataset.name || "");
+          const next = getUsers().filter(x => x !== name);
+          setUsers(next);
+          renderUsers();
+        });
+      });
     }
-  }
-  function setConfirmers(arr) {
-    localStorage.setItem(todayKey(), JSON.stringify(arr));
-  }
-  function renderConfirmers() {
-    const arr = getConfirmers();
-    if (!arr.length) {
-      $("confirmedList").textContent = "（まだありません）";
-      $("checkStatus").textContent = "未確認";
-      return;
+
+    function renderConfirmed(){
+      const iso = todayISO();
+      const all = getConfirmedAll();
+      const list = all[iso] || [];
+      if (list.length === 0){
+        confirmedList.innerHTML = `<div class="empty">（本日の確認者なし）</div>`;
+        return;
+      }
+      confirmedList.innerHTML = list.map(n => `
+        <div class="listRow">
+          <div class="listName">${escapeHtml(n)}</div>
+        </div>
+      `).join("");
     }
-    $("confirmedList").textContent = arr.join("、");
-    const me = getName();
-    $("checkStatus").textContent = me && arr.includes(me) ? "あなたは確認済み" : "未確認";
-  }
 
-  // ===== Buttons =====
-  $("goBtn").addEventListener("click", () => {
-    refreshDeadlineUI();
-    const now = new Date();
-    const dl = getDeadline();
-    const [hh, mm] = dl.split(":").map(Number);
-    const cutoff = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hh, mm, 0, 0);
-    const after = now.getTime() > cutoff.getTime();
+    addUserBtn.addEventListener("click", () => {
+      const name = (addUserInput.value || "").trim();
+      if (!name) return;
+      const users = getUsers();
+      if (!users.includes(name)) users.push(name);
+      setUsers(users);
+      addUserInput.value = "";
+      renderUsers();
+    });
 
-    if (!getName()) {
-      show("name");
-      return;
+    saveDeadlineBtn.addEventListener("click", () => {
+      const v = deadlineInput.value || "17:00";
+      setDeadline(v);
+      refreshHome();
+      alert("締切時間を保存しました。");
+    });
+
+    savePdfBtn.addEventListener("click", () => {
+      const url = (pdfUrlInput.value || "").trim();
+      setPdfUrl(url ? url : "#");
+      alert("PDFリンクを保存しました。");
+    });
+
+    exitAdminBtn.addEventListener("click", () => {
+      showScreen("home");
+    });
+
+    function escapeHtml(str){
+      return String(str)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#39;");
     }
-    if (after) {
-      // 〆切後はPDFは見せる（必要なら）、チェックだけ不可
-      show("pdf");
-      refreshPdfUI();
-      renderConfirmers();
-      refreshDeadlineUI();
-      return;
+
+    // ====== 初回起動 ======
+    refreshHome();
+    // PDF未設定でもOK（管理者で設定）
+    // 初回は登録者0でもOK（登録者を作らない運用も可能）
+    todayText.textContent = todayJP();
+    closedDate.textContent = todayISO();
+
+    // ====== PWA: Service Worker ======
+    if ("serviceWorker" in navigator){
+      navigator.serviceWorker.register("./sw.js").catch(()=>{});
     }
-    show("pdf");
-    refreshPdfUI();
-    renderConfirmers();
-    refreshDeadlineUI();
-  });
-
-  $("saveNameBtn").addEventListener("click", () => {
-    const v = $("nameInput").value.trim();
-    if (!v) { alert("お名前を入力してください"); return; }
-    setName(v);
-    show("pdf");
-    refreshPdfUI();
-    renderConfirmers();
-    refreshDeadlineUI();
-  });
-
-  $("backFromName").addEventListener("click", () => show("home"));
-  $("backFromPdf").addEventListener("click", () => show("home"));
-
-  $("checkBtn").addEventListener("click", () => {
-    refreshDeadlineUI();
-    if ($("checkBtn").hasAttribute("disabled")) return;
-
-    const me = getName();
-    if (!me) { show("name"); return; }
-    const arr = getConfirmers();
-    if (!arr.includes(me)) {
-      arr.push(me);
-      setConfirmers(arr);
-    }
-    renderConfirmers();
-  });
-
-  // ===== Admin =====
-  $("adminBtn").addEventListener("click", () => {
-    $("pinInput").value = "";
-    $("pinPanel").classList.remove("hidden");
-    $("adminPanel").classList.add("hidden");
-    show("admin");
-  });
-  $("backFromAdmin").addEventListener("click", () => show("home"));
-
-  $("pinOkBtn").addEventListener("click", () => {
-    const v = $("pinInput").value.trim();
-    if (v !== ADMIN_PIN) { alert("暗証番号が違います"); return; }
-    $("pinPanel").classList.add("hidden");
-    $("adminPanel").classList.remove("hidden");
-
-    // load current settings
-    $("deadlineInput").value = getDeadline();
-    $("pdfPathInput").value = getPdfPath();
-  });
-
-  $("saveDeadlineBtn").addEventListener("click", () => {
-    const v = $("deadlineInput").value;
-    if (!v) { alert("時刻を選んでください"); return; }
-    setDeadline(v);
-    refreshDeadlineUI();
-    alert("保存しました");
-  });
-
-  $("savePdfBtn").addEventListener("click", () => {
-    const v = $("pdfPathInput").value.trim();
-    if (!v) { alert("PDFのパスを入力してください"); return; }
-    setPdfPath(v);
-    refreshPdfUI();
-    alert("保存しました");
-  });
-
-  $("clearTodayBtn").addEventListener("click", () => {
-    if (!confirm("今日の確認をリセットします。よろしいですか？")) return;
-    localStorage.removeItem(todayKey());
-    alert("リセットしました");
-  });
-
-  // ===== start =====
-  refreshDeadlineUI();
-})();
-</script>
+  </script>
 </body>
 </html>
