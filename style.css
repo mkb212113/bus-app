@@ -30,7 +30,7 @@ body{
 .brand{
   font-weight: 900;
   letter-spacing: .02em;
-  font-size: 18px; /* ←左上MKBを大きくしたい場合ここ */
+  font-size: 25px; /* ←左上MKBを大きくしたい場合ここ */
 }
 
 .adminBtn{
@@ -119,7 +119,7 @@ body{
   margin-top: 18px;
   text-align:center;
   font-weight: 900;
-  font-size: 22px; /* ←締切の文字を大きくしたい場合ここ */
+  font-size: 30px; /* ←締切の文字を大きくしたい場合ここ */
 }
 
 /* ====== カード ====== */
@@ -229,7 +229,7 @@ body{
   text-align:center;
   color: var(--blue);
   font-weight: 900;
-  font-size: 34px;  /* ←「ネット確認は終了しました」を小さくしたいならここ */
+  font-size: 27px;  /* ←「ネット確認は終了しました」を小さくしたいならここ */
 }
 .closedText{
   text-align:center;
@@ -309,3 +309,4 @@ body{
   .deadline{font-size: 20px;}
   .brand{font-size: 16px;}
 }
+
