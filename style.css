@@ -245,7 +245,7 @@ body{
 }
 .closedText{
   font-weight: 900;
-  font-size: 18px;
+  font-size: 15px;
 }
 .phoneIcon{
   font-size: 64px;
@@ -301,6 +301,7 @@ body{
   max-width: 40vw;   /* スマホ対応 */
   opacity: 0.95;
 }
+
 
 
 
