@@ -283,7 +283,7 @@ body{
 /* スマホ最適化 */
 @media (max-width: 360px){
   .title{ font-size: 60px; }
-  .subTitle{ font-size: 35px; }
+  .subTitle{ font-size: 45px; }
   .goBtn{ width: 160px; height: 160px; font-size: 45px; }
   .confirmRow{ flex-direction: column; align-items: stretch; }
   .checkWrap{ justify-content: center; }
@@ -301,6 +301,7 @@ body{
   max-width: 40vw;   /* スマホ対応 */
   opacity: 0.95;
 }
+
 
 
 
