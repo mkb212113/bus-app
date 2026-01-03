@@ -69,7 +69,6 @@ body{
 /* GOボタン */
 .goBtn{
   display:block;
-  /* ★変更：下の間隔を少し広げる（デザインは変えない） */
   margin: 0 auto 28px;
   width: 220px;
   height: 220px;
@@ -88,10 +87,9 @@ body{
   text-shadow: 0 3px 0 rgba(0,0,0,.25);
 }
 
-/* 締切（表示文言はJSで変える） */
+/* 締切 */
 .deadlineWrap{
   text-align:center;
-  /* ★変更：GOとの間隔を少し広げる */
   margin-top: 10px;
 }
 .deadlineText{
@@ -102,7 +100,6 @@ body{
 
 /* 注意書き */
 .homeNote{
-  /* ★変更：締切との間隔を少し広げる */
   margin-top: 14px;
   text-align: center;
   font-size: 13px;
@@ -111,7 +108,7 @@ body{
   letter-spacing: .02em;
 }
 
-/* ★追加：初期画面右下ミニリロード */
+/* 初期画面右下ミニリロード */
 .reloadMiniBtn{
   position: fixed;
   right: 14px;
@@ -281,22 +278,32 @@ body{
   font-weight: 900;
   opacity:.75;
 }
+
+/* ★変更：1行に収めやすく + 間隔を少し広げる */
 .closedTitle{
   text-align:center;
-  margin: 18px 0 8px;
-  font-size: 34px;
+  margin: 18px 0 14px;   /* 下を少し広げる */
+  font-size: 28px;       /* 1行寄せ */
   font-weight: 900;
   color: var(--blue);
+  white-space: nowrap;   /* 折り返し禁止 */
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
+
+/* ★変更：📞との間隔を少し広げる */
 .closedSub{
   text-align:center;
   font-weight: 900;
   font-size: 18px;
+  margin-bottom: 12px;
 }
+
+/* ★変更：上下の余白を少し広げる */
 .phoneIcon{
   text-align:center;
   font-size: 64px;
-  margin: 16px 0 6px;
+  margin: 20px 0 10px;
 }
 
 /* 管理者モーダル */
@@ -362,14 +369,17 @@ body{
 }
 .adminSectionTitle{ font-weight: 900; margin-bottom: 8px; }
 .row{ display:flex; gap: 10px; align-items:center; }
+
+/* ★変更：時間入力がはみ出しにくいよう少し小さく */
 .timeInput{
   flex:1;
-  padding: 10px 10px;
-  border-radius: 10px;
+  padding: 8px 8px;
+  border-radius: 8px;
   border: 1px solid rgba(0,0,0,.2);
   background:#fff;
-  font-size: 16px;
+  font-size: 14px;
 }
+
 .smallBtn{
   border:none;
   background: linear-gradient(#2f7fe6, #1459c4);
@@ -424,6 +434,11 @@ body{
   .title{ font-size: 38px; }
   .goBtn{ width: 200px; height: 200px; font-size: 52px; }
   .deadlineText{ font-size: 26px; }
-  /* 小画面でも間隔を少し確保 */
   .homeNote{ margin-top: 14px; }
+
+  /* さらに小画面で時間入力を少しだけ詰める（保険） */
+  .timeInput{
+    padding: 6px 6px;
+    font-size: 13px;
+  }
 }
