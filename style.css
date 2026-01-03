@@ -23,6 +23,7 @@ body{
   color: var(--text);
 }
 
+/* 上部バー */
 .topbar{
   display:flex;
   align-items:center;
@@ -46,6 +47,7 @@ body{
   font-size: 16px;
 }
 
+/* 画面切替 */
 .screen{
   display:none;
   padding: 18px 16px 28px;
@@ -54,6 +56,7 @@ body{
 }
 .screen.active{ display:block; }
 
+/* タイトル */
 .title{
   text-align:center;
   margin: 18px 0 22px;
@@ -63,9 +66,11 @@ body{
   font-weight: 900;
 }
 
+/* GOボタン */
 .goBtn{
   display:block;
-  margin: 0 auto 20px;
+  /* ★変更：下の間隔を少し広げる（デザインは変えない） */
+  margin: 0 auto 28px;
   width: 220px;
   height: 220px;
   border-radius: 999px;
@@ -75,6 +80,7 @@ body{
   font-weight: 900;
   color: #fff;
   letter-spacing: .06em;
+
   background: radial-gradient(circle at 30% 25%, #7fc0ff 0%, #2e78d6 40%, #1656b9 100%);
   box-shadow:
     0 18px 28px rgba(0,0,0,.18),
@@ -82,15 +88,22 @@ body{
   text-shadow: 0 3px 0 rgba(0,0,0,.25);
 }
 
-.deadlineWrap{ text-align:center; margin-top: 6px; }
+/* 締切（表示文言はJSで変える） */
+.deadlineWrap{
+  text-align:center;
+  /* ★変更：GOとの間隔を少し広げる */
+  margin-top: 10px;
+}
 .deadlineText{
   font-size: 28px;
   font-weight: 900;
   letter-spacing: .02em;
 }
 
+/* 注意書き */
 .homeNote{
-  margin-top: 8px;
+  /* ★変更：締切との間隔を少し広げる */
+  margin-top: 14px;
   text-align: center;
   font-size: 13px;
   font-weight: 900;
@@ -98,6 +111,25 @@ body{
   letter-spacing: .02em;
 }
 
+/* ★追加：初期画面右下ミニリロード */
+.reloadMiniBtn{
+  position: fixed;
+  right: 14px;
+  bottom: 14px;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: 2px solid var(--blue);
+  background: #fff;
+  color: var(--blue);
+  font-weight: 900;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 10px 16px rgba(0,0,0,.14);
+}
+
+/* 名前入力カード */
 .card{
   background: rgba(255,255,255,.55);
   border: 1px solid rgba(0,0,0,.08);
@@ -130,6 +162,7 @@ body{
   box-shadow: 0 0 0 3px rgba(31,102,209,.15);
 }
 
+/* ボタン類 */
 .primaryBtn{
   width: 100%;
   margin-top: 12px;
@@ -164,6 +197,7 @@ body{
   text-decoration: underline;
 }
 
+/* PDF画面 */
 .dateRow{
   display:flex;
   align-items:center;
@@ -240,6 +274,7 @@ body{
   text-align: center;
 }
 
+/* 締切後 */
 .closedDate{
   text-align:center;
   margin-top: 6px;
@@ -264,6 +299,7 @@ body{
   margin: 16px 0 6px;
 }
 
+/* 管理者モーダル */
 .modal{
   position: fixed;
   inset: 0;
@@ -308,6 +344,7 @@ body{
   font-weight: 900;
 }
 
+/* 管理者画面 */
 .adminTitle{
   text-align:center;
   margin: 10px 0 14px;
@@ -374,7 +411,6 @@ body{
 }
 .empty{ font-size: 13px; opacity: .75; }
 
-/* リストだけスクロール */
 #screenAdmin .adminList,
 #screenMembers .adminList{
   max-height: 220px;
@@ -383,9 +419,11 @@ body{
   padding-right: 4px;
 }
 
+/* スマホ微調整 */
 @media (max-width: 360px){
   .title{ font-size: 38px; }
   .goBtn{ width: 200px; height: 200px; font-size: 52px; }
   .deadlineText{ font-size: 26px; }
-  .homeNote{ font-size: 13px; }
+  /* 小画面でも間隔を少し確保 */
+  .homeNote{ margin-top: 14px; }
 }
