@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <meta name="theme-color" content="#1f66d1" />
-  <title>MKB 春日井｜勤務確認</title>
+  <title>MKB 春日井｜前日勤務確認</title>
 
   <link rel="manifest" href="manifest.json" />
   <link rel="stylesheet" href="style.css" />
@@ -17,17 +17,23 @@
 
   <!-- 画面1：ホーム -->
   <main class="screen active" id="screenHome" aria-label="ホーム">
-    <h1 class="title">勤務確認</h1>
+    <!-- ★変更：タイトル文言のみ（デザインはそのまま） -->
+    <h1 class="title">前日勤務確認</h1>
 
     <button class="goBtn" id="goBtn" type="button" aria-label="GO">GO</button>
 
     <div class="deadlineWrap" aria-label="締切">
-      <div class="deadlineText" id="deadlineText">締切：17:00</div>
+      <!-- ★表示はJSで「ネットでの確認は◯◯まで」に変更 -->
+      <div class="deadlineText" id="deadlineText">ネットでの確認は17:00まで</div>
     </div>
 
+    <!-- ★変更：注意文の文言のみ -->
     <div class="homeNote">
-      ※すでに勤務確認をした方は必要ありません。
+      ※確認済みの方は必要ありません。
     </div>
+
+    <!-- ★追加：右下ミニリロード -->
+    <button class="reloadMiniBtn" id="miniReloadBtn" type="button" aria-label="更新">↻</button>
   </main>
 
   <!-- 画面2：名前入力 -->
@@ -124,7 +130,6 @@
       <div class="adminNote">※日付ごとに保存されます（ブラウザ保存）。</div>
     </div>
 
-    <!-- ★ボタンだけ -->
     <div class="adminCard">
       <div class="adminSectionTitle">メンバー管理</div>
       <button class="smallBtn wide" id="openMembersBtn" type="button">メンバー管理へ</button>
@@ -134,7 +139,7 @@
     <button class="linkBtn" id="exitAdminBtn" type="button">ホームへ戻る</button>
   </main>
 
-  <!-- メンバー管理画面（新規） -->
+  <!-- メンバー管理画面 -->
   <main class="screen" id="screenMembers" aria-label="メンバー管理">
     <h2 class="adminTitle">メンバー管理</h2>
 
@@ -211,6 +216,9 @@
     const userList = document.getElementById("userList");
 
     const exitAdminBtn = document.getElementById("exitAdminBtn");
+
+    // ★追加：右下ミニリロード
+    const miniReloadBtn = document.getElementById("miniReloadBtn");
 
     document.getElementById("backToHomeFromName").onclick = () => showScreen("home");
     document.getElementById("backToHomeFromPdf").onclick = () => showScreen("home");
@@ -309,7 +317,8 @@
     }
 
     function refreshHome(){
-      deadlineText.textContent = `締切：${getDeadline()}`;
+      // ★変更：表示文言のみ
+      deadlineText.textContent = `ネットでの確認は${getDeadline()}まで`;
     }
 
     function refreshPdf(){
@@ -534,6 +543,26 @@
         .replaceAll('"',"&quot;")
         .replaceAll("'","&#39;");
     }
+
+    // ★追加：右下ミニリロード（強制更新：SW解除 + キャッシュ削除 + 再読み込み）
+    async function forceReload(){
+      try{
+        if ("serviceWorker" in navigator){
+          const regs = await navigator.serviceWorker.getRegistrations();
+          await Promise.all(regs.map(r => r.unregister()));
+        }
+        if (window.caches && caches.keys){
+          const keys = await caches.keys();
+          await Promise.all(keys.map(k => caches.delete(k)));
+        }
+      }catch(e){
+        // 失敗しても再読み込みでOK
+      }
+      const url = new URL(location.href);
+      url.searchParams.set("v", String(Date.now()));
+      location.replace(url.toString());
+    }
+    miniReloadBtn.addEventListener("click", forceReload);
 
     refreshHome();
     todayText.textContent = todayJP();
