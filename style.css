@@ -60,7 +60,7 @@ body{
   display:flex;
   flex-direction:column;
   justify-content:flex-start;
-  padding-top: 90px;   /* ← この数字だけ調整すればOK */
+  padding-top: 60px;   /* ← この数字だけ調整すればOK */
 }
 
 /* タイトル */
@@ -343,3 +343,4 @@ body{
   .title{ font-size: 38px; }
   .deadlineText{ font-size: 24px; }
 }
+
