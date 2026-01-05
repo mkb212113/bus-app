@@ -1,4 +1,4 @@
-const CACHE_NAME = "mkb-bus-app-v1";
+const CACHE_NAME = "mkb-bus-app-v3"; // ← v3 に変更（ここが肝）
 const ASSETS = [
   "./",
   "./index.html",
@@ -9,14 +9,18 @@ const ASSETS = [
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS)).then(() => self.skipWaiting())
+    caches.open(CACHE_NAME)
+      .then((cache) => cache.addAll(ASSETS))
+      .then(() => self.skipWaiting())
   );
 });
 
 self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches.keys().then(keys =>
-      Promise.all(keys.map(k => (k === CACHE_NAME ? null : caches.delete(k))))
+      Promise.all(
+        keys.map(k => (k === CACHE_NAME ? null : caches.delete(k)))
+      )
     ).then(() => self.clients.claim())
   );
 });
