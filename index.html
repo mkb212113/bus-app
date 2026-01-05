@@ -18,228 +18,86 @@
 
 <!-- 初期画面 -->
 <main class="screen active" id="screenHome">
-  <h1 class="title">前日勤務確認</h1>
+  <div class="screenInner">
+    <h1 class="title">前日勤務確認</h1>
 
-  <button class="primaryBtn startBtn" id="goBtn">押してください</button>
+    <button class="primaryBtn startBtn" id="goBtn">押してください</button>
 
-  <div class="deadlineWrap">
-    <div class="deadlineText" id="deadlineText">
-      ネットでの確認は 17:00 までです
-    </div>
-    <div class="notice">
-      ※確認済みの方は操作の必要はありません<br>
-      ※団体名・個人情報を含むため転用禁止
+    <div class="deadlineWrap">
+      <div class="deadlineText" id="deadlineText">確認時間は 17:00 まで</div>
+
+      <div class="homeNotes">
+        <div class="homeNote">※確認済みの方は操作の必要はありません。</div>
+        <div class="homeNote">※団体名・個人情報を含むため転用禁止</div>
+      </div>
     </div>
   </div>
+
+  <button class="reloadFab" id="reloadFab">↻</button>
 </main>
 
 <!-- 名前入力 -->
 <main class="screen" id="screenName">
-  <div class="card">
-    <div class="cardTitle">名前を入力してください</div>
-    <input class="textInput" id="nameInput" type="text" placeholder="お名前" />
-    <button class="primaryBtn" id="nameConfirmBtn">確認</button>
-    <button class="linkBtn" id="backHomeFromName">戻る</button>
+  <div class="screenInner">
+    <div class="card">
+      <div class="cardTitle">名前を入力してください</div>
+      <input class="textInput" id="nameInput" type="text" placeholder="お名前" />
+      <button class="primaryBtn" id="nameConfirmBtn">確認</button>
+      <button class="linkBtn" id="backToHomeFromName">戻る</button>
+    </div>
   </div>
 </main>
 
 <!-- 点呼簿 -->
 <main class="screen" id="screenPdf">
-  <div class="dateRow">
-    <span class="badgeNew">最新</span>
-    <span class="dateText" id="todayText"></span>
+  <div class="screenInner">
+    <div class="dateRow">
+      <span class="badgeNew">最新</span>
+      <span class="dateText" id="todayText"></span>
+    </div>
+
+    <div class="pdfTitle">点呼簿</div>
+
+    <div class="pdfBox">
+      <div class="pdfIcon">PDF</div>
+      <div class="pdfFile">点呼簿を見る</div>
+      <a class="openBtn" id="openPdfLink" target="_blank">見る</a>
+    </div>
+
+    <!-- ★ 修正箇所 -->
+    <div class="checkAreaVertical">
+      <div class="checkText">確認したら下をチェック</div>
+
+      <label class="checkRowBottom">
+        <input type="checkbox" id="agreeCheck" />
+        <span>確認しました</span>
+      </label>
+    </div>
+
+    <button class="linkBtn" id="openConfirmListBtn">確認状況（当直向け）</button>
+    <button class="linkBtn" id="backToHomeFromPdf">戻る</button>
   </div>
-
-  <div class="pdfTitle">点呼簿</div>
-
-  <div class="pdfBox">
-    <div class="pdfIcon">📄</div>
-    <div class="pdfFile">点呼簿を見る</div>
-    <a class="openBtn" id="openPdfLink" target="_blank">見る</a>
-  </div>
-
-  <div class="checkArea">
-    <div class="checkText">確認できたら、右をチェックしてください</div>
-    <label class="checkLabel">
-      <input type="checkbox" id="agreeCheck" />
-      <span>確認できました</span>
-    </label>
-  </div>
-
-  <button class="linkBtn" id="openConfirmListBtn">
-    確認状況（当直向け）
-  </button>
-
-  <button class="linkBtn" id="backHomeFromPdf">戻る</button>
 </main>
 
 <!-- 確認状況 -->
 <main class="screen" id="screenConfirmList">
-  <h2 class="adminTitle">本日の確認状況</h2>
-  <div class="confirmList" id="confirmList"></div>
-  <button class="linkBtn" id="backToPdf">点呼簿に戻る</button>
+  <div class="screenInner">
+    <h2 class="adminTitle">本日の確認状況</h2>
+    <div class="confirmList" id="confirmList"></div>
+    <button class="linkBtn" id="backToPdf">点呼簿に戻る</button>
+  </div>
 </main>
 
 <!-- 締切後 -->
 <main class="screen" id="screenClosed">
-  <div class="closedTitle">ネット確認は終了しました</div>
-  <div class="closedSub">電話で確認してください</div>
-  <div class="phoneIcon">📞</div>
-  <button class="linkBtn" id="backHomeFromClosed">戻る</button>
+  <div class="screenInner center">
+    <div class="closedTitle">ネット確認は終了しました</div>
+    <div class="closedSub">電話にて確認してください</div>
+    <div class="phoneIcon">📞</div>
+    <button class="linkBtn" id="backToHomeFromClosed">戻る</button>
+  </div>
 </main>
 
-<!-- 管理者モーダル -->
-<div class="modal" id="adminModal">
-  <div class="modalSheet">
-    <div class="modalTitle">管理者</div>
-    <input class="pinInput" id="pinInput" type="password" placeholder="暗証番号" />
-    <button class="primaryBtn" id="pinEnterBtn">開く</button>
-    <button class="linkBtn" id="closeAdminModal">閉じる</button>
-  </div>
-</div>
-
-<!-- 管理者画面 -->
-<main class="screen" id="screenAdmin">
-  <h2 class="adminTitle">管理者画面</h2>
-
-  <div class="adminCard">
-    <div class="adminSectionTitle">締切時間</div>
-    <input class="timeInput" id="deadlineInput" type="time" />
-    <button class="smallBtn" id="saveDeadlineBtn">保存</button>
-  </div>
-
-  <div class="adminCard">
-    <div class="adminSectionTitle">点呼簿リンク</div>
-    <input class="textInput" id="pdfUrlInput" placeholder="URLを貼り付け" />
-    <button class="smallBtn wide" id="savePdfBtn">保存</button>
-  </div>
-
-  <button class="linkBtn" id="exitAdminBtn">ホームへ戻る</button>
-</main>
-
-<script>
-const ADMIN_PIN = "0900";
-const LS = {
-  deadline: "mkb_deadline",
-  pdf: "mkb_pdf",
-  confirmed: "mkb_confirmed"
-};
-
-const screens = document.querySelectorAll(".screen");
-function show(id){
-  screens.forEach(s=>s.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
-}
-
-function today(){
-  const d=new Date();
-  return `${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日`;
-}
-
-function iso(){
-  const d=new Date();
-  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
-}
-
-function now(){
-  const d=new Date();
-  return `${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}`;
-}
-
-function deadline(){
-  return localStorage.getItem(LS.deadline) || "17:00";
-}
-
-function afterDeadline(){
-  return now() > deadline();
-}
-
-document.getElementById("deadlineText").textContent =
-  `ネットでの確認は ${deadline()} までです`;
-
-document.getElementById("todayText").textContent = today();
-
-document.getElementById("goBtn").onclick = ()=>{
-  if(afterDeadline()){ show("screenClosed"); return; }
-  show("screenName");
-};
-
-document.getElementById("nameConfirmBtn").onclick = ()=>{
-  const name = document.getElementById("nameInput").value.trim();
-  if(!name){ alert("名前を入力してください"); return; }
-  sessionStorage.setItem("mkb_name", name);
-  show("screenPdf");
-};
-
-document.getElementById("openPdfLink").href =
-  localStorage.getItem(LS.pdf) || "#";
-
-document.getElementById("agreeCheck").onchange = (e)=>{
-  if(e.target.checked){
-    const name = sessionStorage.getItem("mkb_name");
-    const all = JSON.parse(localStorage.getItem(LS.confirmed)||"{}");
-    const d = iso();
-    all[d] = all[d] || [];
-    if(!all[d].includes(name)) all[d].push(name);
-    localStorage.setItem(LS.confirmed, JSON.stringify(all));
-    alert("確認を記録しました");
-    show("screenHome");
-  }
-};
-
-document.getElementById("openConfirmListBtn").onclick = ()=>{
-  const list = document.getElementById("confirmList");
-  list.innerHTML = "";
-  const all = JSON.parse(localStorage.getItem(LS.confirmed)||"{}");
-  (all[iso()]||[]).forEach(n=>{
-    const div=document.createElement("div");
-    div.className="confirmCard";
-    div.textContent=n;
-    list.appendChild(div);
-  });
-  show("screenConfirmList");
-};
-
-document.getElementById("backToPdf").onclick=()=>show("screenPdf");
-document.getElementById("backHomeFromPdf").onclick=()=>show("screenHome");
-document.getElementById("backHomeFromName").onclick=()=>show("screenHome");
-document.getElementById("backHomeFromClosed").onclick=()=>show("screenHome");
-
-document.getElementById("openAdminBtn").onclick=()=>{
-  document.getElementById("adminModal").classList.add("show");
-};
-
-document.getElementById("closeAdminModal").onclick=()=>{
-  document.getElementById("adminModal").classList.remove("show");
-};
-
-document.getElementById("pinEnterBtn").onclick=()=>{
-  if(document.getElementById("pinInput").value===ADMIN_PIN){
-    document.getElementById("adminModal").classList.remove("show");
-    document.getElementById("deadlineInput").value=deadline();
-    document.getElementById("pdfUrlInput").value=localStorage.getItem(LS.pdf)||"";
-    show("screenAdmin");
-  } else {
-    alert("暗証番号が違います");
-  }
-};
-
-document.getElementById("saveDeadlineBtn").onclick=()=>{
-  localStorage.setItem(LS.deadline, document.getElementById("deadlineInput").value);
-  alert("保存しました");
-};
-
-document.getElementById("savePdfBtn").onclick=()=>{
-  localStorage.setItem(LS.pdf, document.getElementById("pdfUrlInput").value);
-  alert("保存しました");
-};
-
-document.getElementById("exitAdminBtn").onclick=()=>show("screenHome");
-
-if("serviceWorker" in navigator){
-  navigator.serviceWorker.register("./sw.js");
-}
-</script>
-
+<script src="main.js"></script>
 </body>
 </html>
