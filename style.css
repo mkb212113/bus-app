@@ -5,58 +5,73 @@
 }
 
 *{box-sizing:border-box}
+html,body{height:100%}
+
 body{
   margin:0;
-  font-family: system-ui, -apple-system, "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
+  font-family: system-ui, -apple-system, "Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;
   background:var(--bg);
   color:var(--text);
+  line-height:1.7;
 }
 
+/* 上部バー */
 .topbar{
   display:flex;
   justify-content:space-between;
-  padding:12px;
-  background:#fff8;
-  backdrop-filter:blur(6px);
+  align-items:center;
+  padding:12px 14px;
+  background:rgba(251,242,227,.95);
 }
 
-.brand{font-weight:900}
-
+.brand{font-weight:900;font-size:20px}
 .adminBtn{
   border:2px solid var(--blue);
   background:#fff;
   color:var(--blue);
   border-radius:12px;
   padding:6px 12px;
+  font-weight:900;
 }
 
-.screen{display:none;padding:16px;max-width:520px;margin:auto}
+/* 画面全体をゆったり使う */
+.screen{
+  display:none;
+  min-height:calc(100vh - 56px);
+}
 .screen.active{display:block}
 
-.title{text-align:center;font-size:36px;color:var(--blue)}
+.screenInner{
+  max-width:520px;
+  margin:0 auto;
+  padding:32px 16px 48px;
+}
 
+/* タイトル */
+.title{
+  text-align:center;
+  font-size:42px;
+  color:var(--blue);
+  font-weight:900;
+  margin-bottom:24px;
+}
+
+/* ボタン */
 .primaryBtn{
   width:100%;
   padding:14px;
   border:none;
   border-radius:12px;
-  background:var(--blue);
+  background:linear-gradient(#2f7fe6,#1459c4);
   color:#fff;
   font-size:18px;
   font-weight:900;
 }
 
-.startBtn{margin:24px 0}
-
-.deadlineText{text-align:center;font-weight:900}
-.notice{text-align:center;font-size:13px;font-weight:900;margin-top:8px}
-
-.card{background:#fff8;border-radius:16px;padding:16px}
-
-.textInput{width:100%;padding:12px;border-radius:10px;border:1px solid #aaa}
+.startBtn{margin-bottom:28px}
 
 .linkBtn{
-  margin-top:16px;
+  margin-top:20px;
   background:none;
   border:none;
   color:var(--blue);
@@ -64,64 +79,105 @@ body{
   text-decoration:underline;
 }
 
-.pdfBox{
+/* 締切・注意書き */
+.deadlineText{
+  text-align:center;
+  font-size:26px;
+  font-weight:900;
+}
+.homeNotes{
+  margin-top:18px;
   display:flex;
-  align-items:center;
+  flex-direction:column;
   gap:12px;
-  background:#fff8;
-  border-radius:14px;
-  padding:12px;
+}
+.homeNote{
+  text-align:center;
+  font-weight:900;
+  font-size:13px;
 }
 
+/* PDF */
+.pdfBox{
+  margin-top:12px;
+  padding:14px;
+  background:#fff8;
+  border-radius:14px;
+  display:flex;
+  gap:12px;
+  align-items:center;
+}
 .openBtn{
   background:var(--blue);
   color:#fff;
-  padding:8px 12px;
-  border-radius:10px;
+  padding:10px 14px;
+  border-radius:12px;
   text-decoration:none;
+  font-weight:900;
 }
 
-.checkArea{
-  margin-top:40px;
+/* ★ チェックエリア（縦配置） */
+.checkAreaVertical{
+  margin-top:48px;
+  padding:18px;
+  background:#fff8;
+  border-radius:14px;
   text-align:center;
 }
 
 .checkText{
+  font-size:18px;
   font-weight:900;
-  margin-bottom:12px;
+  margin-bottom:14px;
 }
 
+.checkRowBottom{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:10px;
+  font-weight:900;
+}
+.checkRowBottom input{
+  width:22px;
+  height:22px;
+  accent-color:var(--blue);
+}
+
+/* 確認状況カード */
+.confirmList{
+  margin-top:16px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
 .confirmCard{
   background:#fff;
   padding:14px;
-  border-radius:12px;
-  margin-bottom:10px;
+  border-radius:14px;
   font-weight:900;
 }
 
+/* 締切後 */
+.center{text-align:center}
 .closedTitle{
-  text-align:center;
   font-size:24px;
+  font-weight:900;
   color:var(--blue);
+  margin-bottom:12px;
 }
+.closedSub{font-weight:900}
+.phoneIcon{font-size:56px;margin:18px 0}
 
-.closedSub{text-align:center;font-weight:900}
-.phoneIcon{text-align:center;font-size:48px}
-
-.modal{
-  display:none;
+/* リロード */
+.reloadFab{
   position:fixed;
-  inset:0;
-  background:#0006;
-  align-items:center;
-  justify-content:center;
-}
-.modal.show{display:flex}
-
-.modalSheet{
-  background:var(--bg);
-  padding:16px;
-  border-radius:16px;
-  width:100%;
-  max-width:360px;
+  right:14px;
+  bottom:14px;
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  border:2px solid #999;
+  background:#fff;
+  font-weight:900;
 }
