@@ -365,3 +365,11 @@ body{
   .title{ font-size: 38px; }
   .deadlineText{ font-size: 24px; }
 }
+/* OK完了表示 */
+.okDoneText{
+  margin-top: 14px;
+  font-weight: 900;
+  color: var(--blue);
+  font-size: 16px;
+}
+
