@@ -53,11 +53,13 @@ body{
 }
 
 /* ★ 初期画面だけ“ゆったり中央寄せ” */
+
 .homeCenter{
   min-height: calc(100vh - 56px);
   display:flex;
   flex-direction:column;
-  justify-content:center;   /* 中央寄せ */
+  justify-content:flex-start; /* ← center をやめる */
+  padding-top: 110px;         /* ← 高さ調整ポイント */
 }
 
 /* タイトル */
@@ -372,4 +374,5 @@ body{
   color: var(--blue);
   font-size: 16px;
 }
+
 
